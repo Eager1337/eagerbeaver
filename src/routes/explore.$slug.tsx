@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { getProject, PROJECTS } from "../data/projects";
+import { getProject, PROJECTS, type Project } from "../data/projects";
 import { useState } from "react";
 import { ProjectDetailModal } from "../components/portfolio-os/ProjectDetailModal";
 
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/explore/$slug")({
 });
 
 function ProjectPage() {
-  const { project } = Route.useLoaderData();
+  const { project } = Route.useLoaderData() as { project: Project };
   const [open, setOpen] = useState(true);
 
   const related = PROJECTS.filter((p) => p.category === project.category && p.slug !== project.slug).slice(0, 4);

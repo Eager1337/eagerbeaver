@@ -10,11 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkyeliteRouteImport } from './routes/skyelite'
+import { Route as PortfolioOsRouteImport } from './routes/portfolio-os'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as HaloRouteImport } from './routes/halo'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkyeliteIndexRouteImport } from './routes/skyelite.index'
+import { Route as PortfolioOsIndexRouteImport } from './routes/portfolio-os.index'
 import { Route as WorkTaskoraRouteImport } from './routes/work.taskora'
 import { Route as WorkIosRouteImport } from './routes/work.ios'
 import { Route as WorkDeckRouteImport } from './routes/work.deck'
@@ -26,10 +29,17 @@ import { Route as SkyeliteRatesRouteImport } from './routes/skyelite.rates'
 import { Route as SkyeliteFaqRouteImport } from './routes/skyelite.faq'
 import { Route as SkyeliteBookRouteImport } from './routes/skyelite.book'
 import { Route as SkyeliteBenefitsRouteImport } from './routes/skyelite.benefits'
+import { Route as PortfolioOsSlugRouteImport } from './routes/portfolio-os.$slug'
+import { Route as ExploreSlugRouteImport } from './routes/explore.$slug'
 
 const SkyeliteRoute = SkyeliteRouteImport.update({
   id: '/skyelite',
   path: '/skyelite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioOsRoute = PortfolioOsRouteImport.update({
+  id: '/portfolio-os',
+  path: '/portfolio-os',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortfolioRoute = PortfolioRouteImport.update({
@@ -40,6 +50,11 @@ const PortfolioRoute = PortfolioRouteImport.update({
 const HaloRoute = HaloRouteImport.update({
   id: '/halo',
   path: '/halo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -56,6 +71,11 @@ const SkyeliteIndexRoute = SkyeliteIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => SkyeliteRoute,
+} as any)
+const PortfolioOsIndexRoute = PortfolioOsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortfolioOsRoute,
 } as any)
 const WorkTaskoraRoute = WorkTaskoraRouteImport.update({
   id: '/work/taskora',
@@ -112,13 +132,27 @@ const SkyeliteBenefitsRoute = SkyeliteBenefitsRouteImport.update({
   path: '/benefits',
   getParentRoute: () => SkyeliteRoute,
 } as any)
+const PortfolioOsSlugRoute = PortfolioOsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PortfolioOsRoute,
+} as any)
+const ExploreSlugRoute = ExploreSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ExploreRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/explore': typeof ExploreRouteWithChildren
   '/halo': typeof HaloRoute
   '/portfolio': typeof PortfolioRoute
+  '/portfolio-os': typeof PortfolioOsRouteWithChildren
   '/skyelite': typeof SkyeliteRouteWithChildren
+  '/explore/$slug': typeof ExploreSlugRoute
+  '/portfolio-os/$slug': typeof PortfolioOsSlugRoute
   '/skyelite/benefits': typeof SkyeliteBenefitsRoute
   '/skyelite/book': typeof SkyeliteBookRoute
   '/skyelite/faq': typeof SkyeliteFaqRoute
@@ -130,13 +164,17 @@ export interface FileRoutesByFullPath {
   '/work/deck': typeof WorkDeckRoute
   '/work/ios': typeof WorkIosRoute
   '/work/taskora': typeof WorkTaskoraRoute
+  '/portfolio-os/': typeof PortfolioOsIndexRoute
   '/skyelite/': typeof SkyeliteIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/explore': typeof ExploreRouteWithChildren
   '/halo': typeof HaloRoute
   '/portfolio': typeof PortfolioRoute
+  '/explore/$slug': typeof ExploreSlugRoute
+  '/portfolio-os/$slug': typeof PortfolioOsSlugRoute
   '/skyelite/benefits': typeof SkyeliteBenefitsRoute
   '/skyelite/book': typeof SkyeliteBookRoute
   '/skyelite/faq': typeof SkyeliteFaqRoute
@@ -148,15 +186,20 @@ export interface FileRoutesByTo {
   '/work/deck': typeof WorkDeckRoute
   '/work/ios': typeof WorkIosRoute
   '/work/taskora': typeof WorkTaskoraRoute
+  '/portfolio-os': typeof PortfolioOsIndexRoute
   '/skyelite': typeof SkyeliteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/explore': typeof ExploreRouteWithChildren
   '/halo': typeof HaloRoute
   '/portfolio': typeof PortfolioRoute
+  '/portfolio-os': typeof PortfolioOsRouteWithChildren
   '/skyelite': typeof SkyeliteRouteWithChildren
+  '/explore/$slug': typeof ExploreSlugRoute
+  '/portfolio-os/$slug': typeof PortfolioOsSlugRoute
   '/skyelite/benefits': typeof SkyeliteBenefitsRoute
   '/skyelite/book': typeof SkyeliteBookRoute
   '/skyelite/faq': typeof SkyeliteFaqRoute
@@ -168,6 +211,7 @@ export interface FileRoutesById {
   '/work/deck': typeof WorkDeckRoute
   '/work/ios': typeof WorkIosRoute
   '/work/taskora': typeof WorkTaskoraRoute
+  '/portfolio-os/': typeof PortfolioOsIndexRoute
   '/skyelite/': typeof SkyeliteIndexRoute
 }
 export interface FileRouteTypes {
@@ -175,9 +219,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/contact'
+    | '/explore'
     | '/halo'
     | '/portfolio'
+    | '/portfolio-os'
     | '/skyelite'
+    | '/explore/$slug'
+    | '/portfolio-os/$slug'
     | '/skyelite/benefits'
     | '/skyelite/book'
     | '/skyelite/faq'
@@ -189,13 +237,17 @@ export interface FileRouteTypes {
     | '/work/deck'
     | '/work/ios'
     | '/work/taskora'
+    | '/portfolio-os/'
     | '/skyelite/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/contact'
+    | '/explore'
     | '/halo'
     | '/portfolio'
+    | '/explore/$slug'
+    | '/portfolio-os/$slug'
     | '/skyelite/benefits'
     | '/skyelite/book'
     | '/skyelite/faq'
@@ -207,14 +259,19 @@ export interface FileRouteTypes {
     | '/work/deck'
     | '/work/ios'
     | '/work/taskora'
+    | '/portfolio-os'
     | '/skyelite'
   id:
     | '__root__'
     | '/'
     | '/contact'
+    | '/explore'
     | '/halo'
     | '/portfolio'
+    | '/portfolio-os'
     | '/skyelite'
+    | '/explore/$slug'
+    | '/portfolio-os/$slug'
     | '/skyelite/benefits'
     | '/skyelite/book'
     | '/skyelite/faq'
@@ -226,14 +283,17 @@ export interface FileRouteTypes {
     | '/work/deck'
     | '/work/ios'
     | '/work/taskora'
+    | '/portfolio-os/'
     | '/skyelite/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
+  ExploreRoute: typeof ExploreRouteWithChildren
   HaloRoute: typeof HaloRoute
   PortfolioRoute: typeof PortfolioRoute
+  PortfolioOsRoute: typeof PortfolioOsRouteWithChildren
   SkyeliteRoute: typeof SkyeliteRouteWithChildren
   WorkAeonRoute: typeof WorkAeonRoute
   WorkAuraiRoute: typeof WorkAuraiRoute
@@ -252,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkyeliteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio-os': {
+      id: '/portfolio-os'
+      path: '/portfolio-os'
+      fullPath: '/portfolio-os'
+      preLoaderRoute: typeof PortfolioOsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portfolio': {
       id: '/portfolio'
       path: '/portfolio'
@@ -264,6 +331,13 @@ declare module '@tanstack/react-router' {
       path: '/halo'
       fullPath: '/halo'
       preLoaderRoute: typeof HaloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -286,6 +360,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/skyelite/'
       preLoaderRoute: typeof SkyeliteIndexRouteImport
       parentRoute: typeof SkyeliteRoute
+    }
+    '/portfolio-os/': {
+      id: '/portfolio-os/'
+      path: '/'
+      fullPath: '/portfolio-os/'
+      preLoaderRoute: typeof PortfolioOsIndexRouteImport
+      parentRoute: typeof PortfolioOsRoute
     }
     '/work/taskora': {
       id: '/work/taskora'
@@ -364,8 +445,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkyeliteBenefitsRouteImport
       parentRoute: typeof SkyeliteRoute
     }
+    '/portfolio-os/$slug': {
+      id: '/portfolio-os/$slug'
+      path: '/$slug'
+      fullPath: '/portfolio-os/$slug'
+      preLoaderRoute: typeof PortfolioOsSlugRouteImport
+      parentRoute: typeof PortfolioOsRoute
+    }
+    '/explore/$slug': {
+      id: '/explore/$slug'
+      path: '/$slug'
+      fullPath: '/explore/$slug'
+      preLoaderRoute: typeof ExploreSlugRouteImport
+      parentRoute: typeof ExploreRoute
+    }
   }
 }
+
+interface ExploreRouteChildren {
+  ExploreSlugRoute: typeof ExploreSlugRoute
+}
+
+const ExploreRouteChildren: ExploreRouteChildren = {
+  ExploreSlugRoute: ExploreSlugRoute,
+}
+
+const ExploreRouteWithChildren =
+  ExploreRoute._addFileChildren(ExploreRouteChildren)
+
+interface PortfolioOsRouteChildren {
+  PortfolioOsSlugRoute: typeof PortfolioOsSlugRoute
+  PortfolioOsIndexRoute: typeof PortfolioOsIndexRoute
+}
+
+const PortfolioOsRouteChildren: PortfolioOsRouteChildren = {
+  PortfolioOsSlugRoute: PortfolioOsSlugRoute,
+  PortfolioOsIndexRoute: PortfolioOsIndexRoute,
+}
+
+const PortfolioOsRouteWithChildren = PortfolioOsRoute._addFileChildren(
+  PortfolioOsRouteChildren,
+)
 
 interface SkyeliteRouteChildren {
   SkyeliteBenefitsRoute: typeof SkyeliteBenefitsRoute
@@ -392,8 +512,10 @@ const SkyeliteRouteWithChildren = SkyeliteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
+  ExploreRoute: ExploreRouteWithChildren,
   HaloRoute: HaloRoute,
   PortfolioRoute: PortfolioRoute,
+  PortfolioOsRoute: PortfolioOsRouteWithChildren,
   SkyeliteRoute: SkyeliteRouteWithChildren,
   WorkAeonRoute: WorkAeonRoute,
   WorkAuraiRoute: WorkAuraiRoute,
