@@ -526,6 +526,7 @@ function VanguardHero() {
 function HomePage() {
   return (
     <main className="bg-[#0C0C0C]" style={{ overflowX: "clip" }}>
+      <NinjaTortoiseHero />
       <ToonhubHero />
       <JackHero />
       <MarqueeSection />
