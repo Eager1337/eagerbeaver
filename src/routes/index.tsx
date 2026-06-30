@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import charBlack from "../assets/char-black.png";
 import charWhite from "../assets/char-white.png";
 import LithosHero from "../components/LithosHero";
+import { NinjaTortoiseHero } from "../components/portfolio-os/NinjaTortoiseHero";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -525,6 +526,7 @@ function VanguardHero() {
 function HomePage() {
   return (
     <main className="bg-[#0C0C0C]" style={{ overflowX: "clip" }}>
+      <NinjaTortoiseHero />
       <ToonhubHero />
       <JackHero />
       <MarqueeSection />
