@@ -89,7 +89,7 @@ function ToonhubHero() {
       willChange: "transform, filter, opacity",
     };
     if (i === center) {
-      return { ...base, left: "50%", bottom: isMobile ? "22%" : 0, height: isMobile ? "60%" : "92%", transform: `translateX(-50%) scale(${isMobile ? 1.25 : 1.68})`, filter: "blur(0px)", opacity: 1, zIndex: 20 };
+      return { ...base, left: "50%", bottom: isMobile ? "10%" : "6%", height: isMobile ? "72%" : "84%", transform: `translateX(-50%) scale(${isMobile ? 1 : 1.05})`, filter: "blur(0px)", opacity: 1, zIndex: 20 };
     }
     if (i === left) {
       return { ...base, left: isMobile ? "20%" : "30%", bottom: isMobile ? "32%" : "12%", height: isMobile ? "16%" : "28%", transform: "translateX(-50%) scale(1)", filter: "blur(2px)", opacity: 0.85, zIndex: 10 };
