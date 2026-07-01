@@ -13,6 +13,7 @@ import { MotionConfig } from "framer-motion";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CommandPalette } from "../components/portfolio-os/CommandPalette";
+import { RoamingCritters } from "../components/portfolio-os/RoamingCritters";
 
 function NotFoundComponent() {
   return (
@@ -131,6 +132,7 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CommandPalette />
+        <RoamingCritters />
         <Link
           to="/portfolio"
           className="fixed bottom-4 right-4 z-[100] rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-black shadow-lg hover:bg-white transition-colors backdrop-blur"
