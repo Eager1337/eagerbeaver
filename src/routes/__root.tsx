@@ -14,6 +14,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CommandPalette } from "../components/portfolio-os/CommandPalette";
 import { RoamingCritters } from "../components/portfolio-os/RoamingCritters";
+import { PortfolioOsSettingsProvider, bumpSession } from "../lib/portfolio-os-settings";
+import { registerPortfolioOsSw } from "../lib/register-sw";
 
 function NotFoundComponent() {
   return (
@@ -125,21 +127,35 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    bumpSession();
+    registerPortfolioOsSw();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MotionConfig reducedMotion="user">
+      <PortfolioOsSettingsProvider>
+       <MotionConfig reducedMotion="user">
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CommandPalette />
         <RoamingCritters />
-        <Link
-          to="/portfolio"
-          className="fixed bottom-4 right-4 z-[100] rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-black shadow-lg hover:bg-white transition-colors backdrop-blur"
-        >
-          About Eager Beaver →
-        </Link>
-      </MotionConfig>
+        <div className="fixed bottom-4 right-4 z-[100] flex gap-2">
+          <Link
+            to="/portfolio-os/suite"
+            className="rounded-full bg-gradient-to-r from-fuchsia-500 to-sky-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
+          >
+            Investor Suite →
+          </Link>
+          <Link
+            to="/portfolio"
+            className="rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-black shadow-lg hover:bg-white transition-colors backdrop-blur"
+          >
+            About Eager Beaver →
+          </Link>
+        </div>
+       </MotionConfig>
+      </PortfolioOsSettingsProvider>
     </QueryClientProvider>
   );
 }
