@@ -4,6 +4,8 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Crown, X } from "lucide-rea
 import { motion, useScroll, useTransform } from "framer-motion";
 import charBlack from "../assets/char-black.png";
 import charWhite from "../assets/char-white.png";
+import toonRedFull from "../assets/toon-red-full.png.asset.json";
+import toonPink from "../assets/toon-pink.png.asset.json";
 import LithosHero from "../components/LithosHero";
 import { NinjaTortoiseHero } from "../components/portfolio-os/NinjaTortoiseHero";
 
@@ -20,6 +22,8 @@ const IMAGES = [
   { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/4.4457fbce.png", bg: "#6EB5FF" },
   { src: charBlack, bg: "#1A1A1A" },
   { src: charWhite, bg: "#D9D9D9" },
+  { src: toonRedFull.url, bg: "#B21F1F" },
+  { src: toonPink.url, bg: "#F0A6B8" },
 ];
 const N = IMAGES.length;
 
