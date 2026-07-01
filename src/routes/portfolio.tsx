@@ -1,6 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, Github, Linkedin, Mail, Phone, MapPin, Code2, Video, Server, Layers } from "lucide-react";
-import portrait from "../assets/eager-beaver-portrait.png.asset.json";
+import { useState } from "react";
+import { ArrowUpRight, ArrowLeft, ArrowRight, Github, Linkedin, Mail, Phone, MapPin, Code2, Video, Server, Layers, Search, PenTool, Hammer, TestTube2, Rocket, LifeBuoy } from "lucide-react";
+import portraitRed from "../assets/portrait-red.jpg.asset.json";
+import portraitBlackSit from "../assets/portrait-black-sitting.jpg.asset.json";
+import portraitBlackStand from "../assets/portrait-black-standing.jpg.asset.json";
+
+const PORTRAITS = [portraitRed, portraitBlackStand, portraitBlackSit];
 
 export const Route = createFileRoute("/portfolio")({
   head: () => ({
@@ -13,10 +18,10 @@ export const Route = createFileRoute("/portfolio")({
       },
       { property: "og:title", content: "Alusine G. Dumbuya — Eager Beaver" },
       { property: "og:description", content: "Full-stack developer, systems builder and video editor. Sierra Leone." },
-      { property: "og:image", content: portrait.url },
+      { property: "og:image", content: portraitRed.url },
       { property: "og:type", content: "profile" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: portrait.url },
+      { name: "twitter:image", content: portraitRed.url },
     ],
   }),
   component: PortfolioPage,
@@ -35,11 +40,25 @@ const SERVICES = [
 ];
 
 const STACK = [
-  "React", "TypeScript", "Next.js", "TanStack", "Node.js", "PostgreSQL",
+  "HTML5", "CSS3", "JavaScript", "React", "TypeScript", "Next.js", "TanStack", "Node.js", "PostgreSQL",
   "Supabase", "Tailwind CSS", "Framer Motion", "Premiere Pro", "After Effects", "DaVinci Resolve",
 ];
 
+const PROCESS = [
+  { icon: Search, k: "01", t: "Discovery & Brief", d: "I sit with the problem before I touch a file. Goals, users, constraints, budget, deadline, success metric — all written down and confirmed with you before scope is locked." },
+  { icon: PenTool, k: "02", t: "Architecture & Design", d: "Wireframes, data model, API contracts and a component inventory. You approve the flow and the visual direction before a single production line is written." },
+  { icon: Hammer, k: "03", t: "Build in Vertical Slices", d: "I ship one working slice at a time — frontend, backend, database, deployed — so you can click a real thing every few days instead of waiting for a big reveal." },
+  { icon: TestTube2, k: "04", t: "Test, Review, Harden", d: "Type-safe code, real device testing, accessibility pass, Lighthouse, and a security review before anything is called done. Bugs get fixed at the root, not patched." },
+  { icon: Rocket, k: "05", t: "Launch & Handoff", d: "CI/CD pipeline, environment variables documented, a written runbook and a walkthrough call. You own the codebase — no lock-in, no black boxes." },
+  { icon: LifeBuoy, k: "06", t: "Iterate & Support", d: "30-day post-launch window included. After that we can move to a retainer for features, monitoring and monthly reports — or you're free to fly solo." },
+];
+
 function PortfolioPage() {
+  const [pIdx, setPIdx] = useState(0);
+  const nextP = () => setPIdx((i) => (i + 1) % PORTRAITS.length);
+  const prevP = () => setPIdx((i) => (i - 1 + PORTRAITS.length) % PORTRAITS.length);
+  const current = PORTRAITS[pIdx];
+
   return (
     <div className="min-h-screen bg-[#0C0C0C] text-[#F1FAEE] font-[Inter,sans-serif] antialiased selection:bg-[#E63946] selection:text-white">
       {/* Top nav */}
@@ -51,6 +70,7 @@ function PortfolioPage() {
           <div className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
             <a href="#work" className="text-[#A8A8A8] hover:text-white transition-colors">Work</a>
             <a href="#services" className="text-[#A8A8A8] hover:text-white transition-colors hidden sm:inline">Services</a>
+            <a href="#process" className="text-[#A8A8A8] hover:text-white transition-colors hidden sm:inline">Process</a>
             <a href="#contact" className="text-[#A8A8A8] hover:text-white transition-colors">Contact</a>
             <Link
               to="/"
@@ -124,13 +144,35 @@ function PortfolioPage() {
               <div className="absolute -inset-4 bg-[#E63946]/30 blur-3xl rounded-full" aria-hidden />
               <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#1A1410]">
                 <img
-                  src={portrait.url}
+                  key={current.url}
+                  src={current.url}
                   alt="Alusine G. Dumbuya — Eager Beaver"
-                  className="w-full h-auto block"
+                  className="w-full h-auto block animate-in fade-in duration-500"
                   loading="eager"
                   fetchPriority="high"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0C0C0C] via-transparent to-transparent" />
+                <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                  <button
+                    onClick={prevP}
+                    aria-label="Previous portrait"
+                    className="rounded-full bg-black/50 hover:bg-[#E63946] text-white p-2.5 backdrop-blur transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+                  <div className="flex gap-1.5">
+                    {PORTRAITS.map((_, i) => (
+                      <span key={i} className={`h-1.5 rounded-full transition-all ${i === pIdx ? "w-6 bg-[#E63946]" : "w-1.5 bg-white/40"}`} />
+                    ))}
+                  </div>
+                  <button
+                    onClick={nextP}
+                    aria-label="Next portrait"
+                    className="rounded-full bg-black/50 hover:bg-[#E63946] text-white p-2.5 backdrop-blur transition-colors"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
                 <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.3em] text-[#A8A8A8]">Currently</p>
@@ -140,6 +182,59 @@ function PortfolioPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section id="process" className="px-5 sm:px-8 py-20 border-t border-white/5">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-end justify-between gap-8 mb-12 flex-wrap">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-[#E63946]">How I work</p>
+              <h2 className="mt-3 font-[Anton,sans-serif] uppercase text-4xl sm:text-6xl leading-none">
+                Six steps. Zero<br /><span className="text-[#E63946]">surprises.</span>
+              </h2>
+            </div>
+            <p className="max-w-md text-sm text-[#A8A8A8] leading-relaxed">
+              Every project I take on runs through the same disciplined pipeline — so you always know what's happening, what's next, and what "done" looks like. No vibes, no vanishing acts.
+            </p>
+          </div>
+
+          <ol className="relative border-l border-white/10 ml-3 sm:ml-6">
+            {PROCESS.map(({ icon: Icon, k, t, d }, i) => (
+              <li key={k} className="pl-8 sm:pl-12 pb-10 last:pb-0 relative">
+                <span className="absolute -left-[13px] top-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#E63946] text-[10px] font-bold text-white">
+                  {i + 1}
+                </span>
+                <div className="flex items-start gap-4 sm:gap-6">
+                  <div className="hidden sm:flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-[#1A1410]">
+                    <Icon className="w-6 h-6 text-[#E63946]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-3 flex-wrap">
+                      <span className="font-[Anton,sans-serif] text-3xl sm:text-4xl text-white/30">{k}</span>
+                      <h3 className="font-[Anton,sans-serif] uppercase text-xl sm:text-2xl tracking-wide">{t}</h3>
+                    </div>
+                    <p className="mt-2 text-sm text-[#A8A8A8] leading-relaxed max-w-2xl">{d}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">
+            {[
+              { k: "Fixed", v: "Scope + price agreed upfront" },
+              { k: "Weekly", v: "Demo call every Friday" },
+              { k: "Owned", v: "You keep the code, always" },
+              { k: "30 days", v: "Free post-launch support" },
+            ].map((s) => (
+              <div key={s.k} className="bg-[#0C0C0C] p-5 sm:p-6">
+                <p className="font-[Anton,sans-serif] uppercase text-2xl text-white">{s.k}</p>
+                <p className="mt-1 text-xs text-[#A8A8A8]">{s.v}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
