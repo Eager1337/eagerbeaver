@@ -209,3 +209,14 @@
   50% { opacity: 0; }
 }
 .animate-blink { animation: blink 1s step-end infinite; }
+
+/* Portfolio OS accessibility settings */
+html[data-os-text="large"] body { font-size: 1.08em; }
+html[data-os-contrast="high"] body { filter: contrast(1.18) saturate(1.08); }
+html[data-os-motion="reduced"] *, html[data-os-motion="reduced"] *::before, html[data-os-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-os-font="dyslexic"] body { font-family: "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif !important; letter-spacing: 0.02em; }

@@ -5,6 +5,7 @@ import { ArrowLeft, Search, Bookmark, BookmarkCheck, GitCompare } from "lucide-r
 import { PROJECTS, CATEGORIES, type Project, type ProjectCategory } from "../data/projects";
 import { ProjectCard } from "../components/portfolio-os/ProjectCard";
 import { ProjectDetailModal } from "../components/portfolio-os/ProjectDetailModal";
+import { trackEvent } from "../lib/portfolio-os-settings";
 
 export const Route = createFileRoute("/explore")({
   head: () => ({
@@ -23,6 +24,11 @@ function ExplorePage() {
   const [active, setActive] = useState<ProjectCategory | "All">("All");
   const [open, setOpen] = useState<Project | null>(null);
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
+
+  const openProject = (p: Project) => {
+    trackEvent("project", p.slug);
+    setOpen(p);
+  };
 
   const filtered = useMemo(() => {
     return PROJECTS.filter((p) => {
@@ -99,7 +105,7 @@ function ExplorePage() {
         >
           {filtered.map((p) => (
             <div key={p.slug} className="relative">
-              <ProjectCard project={p} onOpen={() => setOpen(p)} />
+              <ProjectCard project={p} onOpen={() => openProject(p)} />
               <button
                 onClick={(e) => { e.stopPropagation(); toggleBookmark(p.slug); }}
                 className="absolute right-3 top-3 z-20 rounded-full bg-black/40 p-2 text-white backdrop-blur hover:bg-black/60"
