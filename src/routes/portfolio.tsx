@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowUpRight, ArrowLeft, ArrowRight, Github, Linkedin, Mail, Phone, MapPin, Code2, Video, Server, Layers, Search, PenTool, Hammer, TestTube2, Rocket, LifeBuoy } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, ArrowRight, Github, Linkedin, Mail, Phone, MapPin, Code2, Video, Server, Layers, Search, PenTool, Hammer, TestTube2, Rocket, LifeBuoy, FileText, Check } from "lucide-react";
+import { downloadCvPdf, downloadRateCardPdf } from "../lib/pdf-exports";
 import portraitRed from "../assets/portrait-red.jpg.asset.json";
 import portraitBlackSit from "../assets/portrait-black-sitting.jpg.asset.json";
 import portraitBlackStand from "../assets/portrait-black-standing.jpg.asset.json";
@@ -107,6 +108,18 @@ function PortfolioPage() {
               >
                 Hire me <ArrowUpRight className="w-4 h-4" />
               </a>
+              <button
+                onClick={downloadCvPdf}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-white hover:bg-white hover:text-[#0C0C0C] transition-colors"
+              >
+                <FileText className="w-4 h-4" /> Download CV
+              </button>
+              <button
+                onClick={downloadRateCardPdf}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-white hover:bg-white hover:text-[#0C0C0C] transition-colors"
+              >
+                <FileText className="w-4 h-4" /> Rate card
+              </button>
               <a
                 href={GITHUB}
                 target="_blank"
@@ -322,6 +335,47 @@ function PortfolioPage() {
                 <Github className="w-4 h-4" /> @Eager1337 <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="px-5 sm:px-8 py-20 border-t border-white/5">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#E63946]">Investment</p>
+          <h2 className="mt-3 font-[Anton,sans-serif] uppercase text-4xl sm:text-6xl leading-none">Pricing, upfront.</h2>
+          <p className="mt-4 max-w-2xl text-sm text-[#A8A8A8]">Fixed-scope packages. No hourly billing games. Everything includes design, development, deployment on Lovable Cloud and 30-day post-launch support.</p>
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {[
+              { name: "Starter Site", price: "$1,200", weeks: "2 weeks", best: false, inc: ["Up to 5 pages", "Responsive design", "Contact form", "Basic SEO", "Deployed live"] },
+              { name: "Growth Site", price: "$3,500", weeks: "4 weeks", best: true, inc: ["Up to 12 pages", "CMS / content model", "Auth + user accounts", "Analytics dashboard", "Custom animations"] },
+              { name: "Signature Build", price: "from $8,000", weeks: "6–10 weeks", best: false, inc: ["Unlimited pages", "AI features", "Payments", "Multi-language", "Investor dashboard"] },
+            ].map((t) => (
+              <div key={t.name} className={`rounded-2xl border p-6 sm:p-7 ${t.best ? "border-[#E63946] bg-[#1A1410]" : "border-white/10 bg-[#0C0C0C]"}`}>
+                {t.best && <div className="mb-3 inline-block rounded-full bg-[#E63946] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest">Most popular</div>}
+                <h3 className="font-[Anton,sans-serif] uppercase text-2xl">{t.name}</h3>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-[Anton,sans-serif] text-4xl text-white">{t.price}</span>
+                  <span className="text-xs text-[#A8A8A8]">· {t.weeks}</span>
+                </div>
+                <ul className="mt-5 space-y-2 text-sm text-[#F1FAEE]">
+                  {t.inc.map((i) => (
+                    <li key={i} className="flex items-start gap-2"><Check className="w-4 h-4 text-[#E63946] shrink-0 mt-0.5" /><span>{i}</span></li>
+                  ))}
+                </ul>
+                <a href={`mailto:${EMAIL}?subject=${encodeURIComponent(t.name + " enquiry")}`} className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${t.best ? "bg-[#E63946] text-white hover:bg-white hover:text-[#0C0C0C]" : "border border-white/20 hover:border-white hover:bg-white hover:text-[#0C0C0C]"}`}>
+                  Start this package <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button onClick={downloadRateCardPdf} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0C0C0C] hover:bg-[#E63946] hover:text-white transition-colors">
+              <FileText className="w-4 h-4" /> Download full rate card
+            </button>
+            <button onClick={downloadCvPdf} className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-white hover:bg-white hover:text-[#0C0C0C] transition-colors">
+              <FileText className="w-4 h-4" /> Download CV (PDF)
+            </button>
           </div>
         </div>
       </section>
