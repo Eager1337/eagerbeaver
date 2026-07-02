@@ -13,7 +13,6 @@ import { MotionConfig } from "framer-motion";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CommandPalette } from "../components/portfolio-os/CommandPalette";
-import { RoamingCritters } from "../components/portfolio-os/RoamingCritters";
 import { PortfolioOsSettingsProvider, bumpSession } from "../lib/portfolio-os-settings";
 import { registerPortfolioOsSw } from "../lib/register-sw";
 
@@ -139,13 +138,18 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CommandPalette />
-        <RoamingCritters />
         <div className="fixed bottom-4 right-4 z-[100] flex gap-2">
           <Link
             to="/portfolio-os/suite"
             className="rounded-full bg-gradient-to-r from-fuchsia-500 to-sky-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
           >
             Investor Suite →
+          </Link>
+          <Link
+            to="/legends"
+            className="rounded-full bg-black/80 border border-white/30 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:bg-black backdrop-blur transition-colors"
+          >
+            Legends →
           </Link>
           <Link
             to="/portfolio"

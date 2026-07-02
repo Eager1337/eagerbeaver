@@ -1,11 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Crown, X } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import charBlack from "../assets/char-black.png";
 import charWhite from "../assets/char-white.png";
 import toonRedFull from "../assets/toon-red-full.png.asset.json";
 import toonPink from "../assets/toon-pink.png.asset.json";
+import onePieceCast from "../assets/one-piece-cast.png.asset.json";
+import saitama from "../assets/saitama.png.asset.json";
 import LithosHero from "../components/LithosHero";
 import { NinjaTortoiseHero } from "../components/portfolio-os/NinjaTortoiseHero";
 
@@ -16,14 +18,16 @@ export const Route = createFileRoute("/")({
 /* ------------------- TOONHUB HERO ------------------- */
 
 const IMAGES = [
-  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/1.02464a56.png", bg: "#F4845F" },
-  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/2.b977faab.png", bg: "#6BBF7A" },
-  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/3.4df853b4.png", bg: "#E882B4" },
-  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/4.4457fbce.png", bg: "#6EB5FF" },
-  { src: charBlack, bg: "#1A1A1A" },
-  { src: charWhite, bg: "#D9D9D9" },
-  { src: toonRedFull.url, bg: "#B21F1F" },
-  { src: toonPink.url, bg: "#F0A6B8" },
+  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/1.02464a56.png", bg: "#F4845F", label: "Toon 01" },
+  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/2.b977faab.png", bg: "#6BBF7A", label: "Toon 02" },
+  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/3.4df853b4.png", bg: "#E882B4", label: "Toon 03" },
+  { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/4.4457fbce.png", bg: "#6EB5FF", label: "Toon 04" },
+  { src: charBlack, bg: "#1A1A1A", label: "Ink Black" },
+  { src: charWhite, bg: "#D9D9D9", label: "Cast White" },
+  { src: toonRedFull.url, bg: "#B21F1F", label: "Red Signature" },
+  { src: toonPink.url, bg: "#F0A6B8", label: "Pink Studio" },
+  { src: onePieceCast.url, bg: "#0A1A2E", label: "One Piece Crew" },
+  { src: saitama.url, bg: "#050505", label: "One Punch" },
 ];
 const N = IMAGES.length;
 
@@ -33,29 +37,16 @@ const ITEM_TRANSITION = `transform 650ms ${EASE}, filter 650ms ${EASE}, opacity 
 
 function ToonhubHero() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
-
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 640);
-    onResize();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const current = IMAGES[activeIndex];
 
   const navigate = useCallback(
     (dir: "next" | "prev") => {
-      if (isAnimating) return;
-      setIsAnimating(true);
       setActiveIndex((prev) => (dir === "next" ? (prev + 1) % N : (prev + N - 1) % N));
-      window.setTimeout(() => setIsAnimating(false), 650);
     },
-    [isAnimating],
+    [],
   );
 
-  // keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") navigate("next");
@@ -65,7 +56,6 @@ function ToonhubHero() {
     return () => window.removeEventListener("keydown", onKey);
   }, [navigate]);
 
-  // touch swipe
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -76,40 +66,12 @@ function ToonhubHero() {
     touchStartX.current = null;
   };
 
-  const center = activeIndex;
-  const left = (activeIndex + N - 1) % N;
-  const right = (activeIndex + 1) % N;
-  const back = (activeIndex + 2) % N;
-
-  const getItemStyle = (i: number): React.CSSProperties => {
-    const base: React.CSSProperties = {
-      position: "absolute",
-      aspectRatio: "0.6 / 1",
-      transition: ITEM_TRANSITION,
-      willChange: "transform, filter, opacity",
-    };
-    if (i === center) {
-      return { ...base, left: "50%", bottom: isMobile ? "10%" : "6%", height: isMobile ? "72%" : "84%", transform: `translateX(-50%) scale(${isMobile ? 1 : 1.05})`, filter: "blur(0px)", opacity: 1, zIndex: 20 };
-    }
-    if (i === left) {
-      return { ...base, left: isMobile ? "20%" : "30%", bottom: isMobile ? "32%" : "12%", height: isMobile ? "16%" : "28%", transform: "translateX(-50%) scale(1)", filter: "blur(2px)", opacity: 0.85, zIndex: 10 };
-    }
-    if (i === right) {
-      return { ...base, left: isMobile ? "80%" : "70%", bottom: isMobile ? "32%" : "12%", height: isMobile ? "16%" : "28%", transform: "translateX(-50%) scale(1)", filter: "blur(2px)", opacity: 0.85, zIndex: 10 };
-    }
-    if (i === back) {
-      return { ...base, left: "50%", bottom: isMobile ? "32%" : "12%", height: isMobile ? "13%" : "22%", transform: "translateX(-50%) scale(1)", filter: "blur(4px)", opacity: 1, zIndex: 5 };
-    }
-    return { ...base, left: "50%", bottom: "12%", height: "0%", opacity: 0, transform: "translateX(-50%) scale(0.8)", zIndex: 1, pointerEvents: "none" };
-  };
-
   return (
     <div
-      ref={sectionRef}
       role="region"
       aria-label="Toonhub figurines carousel"
       className="relative w-full overflow-hidden"
-      style={{ backgroundColor: IMAGES[activeIndex].bg, transition: `background-color 650ms ${EASE}`, fontFamily: "Inter, sans-serif" }}
+      style={{ backgroundColor: current.bg, transition: `background-color 650ms ${EASE}`, fontFamily: "Inter, sans-serif" }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -129,17 +91,41 @@ function ToonhubHero() {
           TOONHUB
         </div>
 
-        <div className="absolute inset-0" style={{ zIndex: 3 }}>
-          {IMAGES.map((img, i) => (
-            <div key={i} style={getItemStyle(i)}>
-              <img src={img.src} alt="" draggable={false} style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom center" }} />
-            </div>
+        {/* Fixed stage — object-contain guarantees no cropping at any breakpoint */}
+        <div className="absolute inset-0 flex items-end justify-center" style={{ zIndex: 3, paddingBottom: "6%" }}>
+          <div className="relative h-[78%] w-full max-w-[640px] mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={current.src}
+                src={current.src}
+                alt={current.label}
+                draggable={false}
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+                className="absolute inset-0 h-full w-full"
+                style={{ objectFit: "contain", objectPosition: "bottom center" }}
+              />
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Slide indicator */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5" style={{ zIndex: 60 }}>
+          {IMAGES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all ${i === activeIndex ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/70"}`}
+            />
           ))}
         </div>
 
         <div className="absolute bottom-6 left-4 sm:bottom-20 sm:left-24" style={{ zIndex: 60, maxWidth: 320 }}>
           <h2 className="mb-2 sm:mb-3 text-base sm:text-[22px] font-bold uppercase tracking-widest" style={{ color: "#fff" }}>
-            TOONHUB FIGURINES
+            {current.label}
           </h2>
           <p className="hidden sm:block text-xs sm:text-sm mb-4 sm:mb-5" style={{ color: "#fff", opacity: 0.85, lineHeight: 1.6 }}>
             The artwork is stunning, shipped fully prepared. The finish is a vision, the 3D craft is flawless. Many thanks! Wishing you the win. Order now.

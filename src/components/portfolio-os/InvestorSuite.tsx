@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bot, BarChart3, Settings2, Calculator, Download, Send, RefreshCw, Trash2 } from "lucide-react";
+import { Bot, BarChart3, Settings2, Calculator, Download, Send, RefreshCw, Trash2, FileSpreadsheet, FileText } from "lucide-react";
 import { PROJECTS } from "../../data/projects";
 import { FEATURES } from "../../data/features";
 import { PAGES } from "../../data/pages";
 import { readAnalytics, resetAnalytics, useOsSettings, type Analytics } from "../../lib/portfolio-os-settings";
+import { downloadAnalyticsCsv, downloadAnalyticsPdf, downloadQuotePdf } from "../../lib/pdf-exports";
 
 type Tab = "assistant" | "analytics" | "settings" | "estimator";
 
@@ -180,9 +181,17 @@ function AnalyticsPanel() {
       <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold uppercase tracking-widest text-white/70">Most-viewed case studies</h3>
-          <button onClick={() => { resetAnalytics(); setA(readAnalytics()); }} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/70 hover:text-white">
-            <Trash2 className="h-3 w-3" /> Reset
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => downloadAnalyticsCsv(a, [compareA, compareB])} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/80 hover:bg-white hover:text-black">
+              <FileSpreadsheet className="h-3 w-3" /> Export CSV
+            </button>
+            <button onClick={() => downloadAnalyticsPdf(a, [compareA, compareB])} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/80 hover:bg-white hover:text-black">
+              <FileText className="h-3 w-3" /> Export PDF
+            </button>
+            <button onClick={() => { resetAnalytics(); setA(readAnalytics()); }} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/70 hover:text-white">
+              <Trash2 className="h-3 w-3" /> Reset
+            </button>
+          </div>
         </div>
         {topProjects.length === 0 ? (
           <p className="text-sm text-white/50">No data yet — open projects from <Link to="/explore" className="underline">Explore</Link> to populate.</p>
@@ -385,6 +394,28 @@ Reply to confirm and I'll send a signable SOW within 24 hours.
     URL.revokeObjectURL(url);
   }
 
+  function downloadPdf() {
+    const addons = [
+      s.auth && "Authentication & user accounts",
+      s.cms && "Headless CMS",
+      s.ai && "AI features (chat / recommendations)",
+      s.payments && "Payments",
+      s.i18n && "Multi-language",
+      s.analytics && "Analytics dashboard",
+    ].filter(Boolean) as string[];
+    downloadQuotePdf({
+      client: s.contact,
+      pages: s.pages,
+      complexity: s.complexity,
+      timelineTier: s.timelineTier,
+      weeks: calc.weeks,
+      addons,
+      subtotal: calc.subtotal,
+      addonsTotal: calc.addons,
+      total: calc.total,
+    });
+  }
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <div className="space-y-5 rounded-2xl border border-white/10 bg-white/5 p-5">
@@ -434,9 +465,14 @@ Reply to confirm and I'll send a signable SOW within 24 hours.
           <div className="flex justify-between"><span>Base</span><span className="tabular-nums">${calc.subtotal.toLocaleString()}</span></div>
           <div className="flex justify-between"><span>Add-ons</span><span className="tabular-nums">${calc.addons.toLocaleString()}</span></div>
         </div>
-        <button onClick={download} className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-white/90">
-          <Download className="h-4 w-4" /> {t("download")}
-        </button>
+        <div className="mt-auto flex flex-col gap-2">
+          <button onClick={downloadPdf} className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-white/90">
+            <FileText className="h-4 w-4" /> Download PDF proposal
+          </button>
+          <button onClick={download} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2 text-xs font-semibold text-white/80 hover:bg-white/10">
+            <Download className="h-3.5 w-3.5" /> Markdown version
+          </button>
+        </div>
         <button onClick={() => setS({ pages: 6, complexity: "pro", auth: true, cms: false, ai: false, payments: false, i18n: false, analytics: true, timelineTier: "standard", contact: "" })} className="mt-2 inline-flex items-center justify-center gap-1 text-xs text-white/60 hover:text-white">
           <RefreshCw className="h-3 w-3" /> Reset
         </button>
