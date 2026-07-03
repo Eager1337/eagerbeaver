@@ -95,7 +95,7 @@ export default function LithosHero() {
         />
         <RevealLayer image={BG_IMAGE_2} cursorX={cursorPos.x} cursorY={cursorPos.y} />
 
-        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-8 md:px-10 py-5">
+        <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-8 md:px-10 py-5">
           <div className="flex items-center gap-2 text-white">
             <svg width="26" height="26" viewBox="0 0 256 256" fill="#ffffff">
               <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z M 256 128 L 128 128 L 0 0 L 128 0 Z" />

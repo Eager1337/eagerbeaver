@@ -15,7 +15,7 @@ export function NinjaTortoiseHero() {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-black text-white" style={{ minHeight: "100vh" }}>
+    <section className="relative w-full overflow-hidden bg-black text-white min-h-[100dvh] pb-40 sm:pb-24">
       <video
         ref={videoRef}
         src={videoAsset.url}
@@ -48,7 +48,7 @@ export function NinjaTortoiseHero() {
       </div>
 
       {/* Center */}
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 pt-12 text-center sm:pt-20">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-5 sm:px-6 pt-8 sm:pt-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export function NinjaTortoiseHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.1 }}
           className="mt-6 max-w-5xl font-black uppercase leading-[0.95] tracking-tight"
-          style={{ fontSize: "clamp(2.4rem, 8vw, 6.5rem)", fontFamily: "'Kanit', sans-serif" }}
+          style={{ fontSize: "clamp(2rem, 8vw, 6.5rem)", fontFamily: "'Kanit', sans-serif" }}
         >
           I don't ship sites.<br />
           <span className="bg-gradient-to-r from-fuchsia-400 via-violet-400 to-sky-400 bg-clip-text text-transparent">
@@ -84,26 +84,26 @@ export function NinjaTortoiseHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.4 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-3"
+          className="mt-8 sm:mt-10 flex w-full flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3"
         >
-          <Link to="/explore">
-            <MagneticButton className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-black shadow-2xl hover:shadow-white/20">
+          <Link to="/explore" className="w-full sm:w-auto">
+            <MagneticButton className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-black shadow-2xl hover:shadow-white/20">
               Explore 50 sites <ArrowRight className="h-4 w-4" />
             </MagneticButton>
           </Link>
-          <Link to="/portfolio-os">
-            <MagneticButton className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10">
+          <Link to="/portfolio-os" className="w-full sm:w-auto">
+            <MagneticButton className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10">
               Inspect the OS
             </MagneticButton>
           </Link>
         </motion.div>
 
-        {/* Bottom stat strip */}
+        {/* Stat strip — inline on mobile so it can't overlap the CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6 }}
-          className="absolute bottom-10 left-0 right-0 mx-auto grid max-w-5xl grid-cols-2 gap-3 px-6 sm:grid-cols-4"
+          className="relative sm:absolute sm:bottom-10 sm:left-0 sm:right-0 mx-auto mt-10 sm:mt-0 grid w-full max-w-5xl grid-cols-2 gap-2.5 sm:gap-3 px-0 sm:px-6 sm:grid-cols-4"
         >
           {[
             ["50", "Case studies"],
@@ -111,9 +111,9 @@ export function NinjaTortoiseHero() {
             ["50", "Pages"],
             ["$680M+", "Capital tracked"],
           ].map(([v, l]) => (
-            <div key={l} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left backdrop-blur">
-              <div className="text-2xl font-black tracking-tight">{v}</div>
-              <div className="text-[11px] uppercase tracking-widest text-white/60">{l}</div>
+            <div key={l} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5 sm:px-4 sm:py-3 text-left backdrop-blur">
+              <div className="text-lg sm:text-2xl font-black tracking-tight">{v}</div>
+              <div className="text-[10px] sm:text-[11px] uppercase tracking-widest text-white/60">{l}</div>
             </div>
           ))}
         </motion.div>
