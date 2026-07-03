@@ -1,14 +1,33 @@
 import { jsPDF } from "jspdf";
 import type { Analytics } from "./portfolio-os-settings";
 import { PROJECTS } from "../data/projects";
+import portraitAsset from "../assets/portrait-red.jpg.asset.json";
 
 const BRAND = "Alusine G. Dumbuya — Eager Beaver";
 const BRAND_TAG = "Full-Stack Developer · Systems Builder · Video Editor";
 const CONTACT = "ebeaver091@gmail.com · +232 33 695 803 · github.com/Eager1337";
 
-function header(doc: jsPDF, title: string) {
+let cachedPortrait: string | null = null;
+async function loadPortrait(): Promise<string | null> {
+  if (cachedPortrait) return cachedPortrait;
+  try {
+    const res = await fetch(portraitAsset.url);
+    const blob = await res.blob();
+    return await new Promise<string>((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => { cachedPortrait = fr.result as string; resolve(cachedPortrait!); };
+      fr.onerror = reject;
+      fr.readAsDataURL(blob);
+    });
+  } catch { return null; }
+}
+
+function header(doc: jsPDF, title: string, portrait?: string | null) {
   doc.setFillColor(230, 57, 70);
   doc.rect(0, 0, 210, 22, "F");
+  if (portrait) {
+    try { doc.addImage(portrait, "JPEG", 175, 3, 16, 16); } catch { /* ignore */ }
+  }
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
@@ -41,10 +60,14 @@ function saveAs(doc: jsPDF, name: string) {
 }
 
 /* ============ CV ============ */
-export function downloadCvPdf() {
+export async function downloadCvPdf() {
   const doc = new jsPDF();
-  header(doc, "Curriculum Vitae");
+  const portrait = await loadPortrait();
+  header(doc, "Curriculum Vitae", portrait);
   let y = 46;
+  if (portrait) {
+    try { doc.addImage(portrait, "JPEG", 150, 42, 46, 56); } catch { /* ignore */ }
+  }
   doc.setFontSize(10).setTextColor(60, 60, 60).setFont("helvetica", "normal");
   doc.text("Freetown, Sierra Leone · Limkokwing University", 14, y);
   y += 8;
@@ -101,9 +124,10 @@ export function downloadCvPdf() {
 }
 
 /* ============ Rate card ============ */
-export function downloadRateCardPdf() {
+export async function downloadRateCardPdf() {
   const doc = new jsPDF();
-  header(doc, "Rate Card & Packages");
+  const portrait = await loadPortrait();
+  header(doc, "Rate Card & Packages", portrait);
   let y = 46;
   doc.setFontSize(10).setTextColor(60, 60, 60);
   doc.text("All prices in USD. Includes design, development, deploy and 30-day support.", 14, y);
@@ -182,13 +206,24 @@ export function downloadAnalyticsCsv(a: Analytics, compare?: [string, string]) {
   URL.revokeObjectURL(url);
 }
 
-export function downloadAnalyticsPdf(a: Analytics, compare?: [string, string]) {
+export async function downloadAnalyticsPdf(a: Analytics, compare?: [string, string]) {
   const doc = new jsPDF();
-  header(doc, "Investor Analytics Report");
+  const portrait = await loadPortrait();
+  header(doc, "Investor Analytics Pack", portrait);
   let y = 46;
   doc.setFontSize(10).setTextColor(60, 60, 60);
   doc.text(`Generated ${new Date().toLocaleString()}`, 14, y);
-  y += 10;
+  y += 6;
+  doc.setFontSize(9).setTextColor(90, 90, 90);
+  doc.text(
+    doc.splitTextToSize(
+      "Investor-grade snapshot of Portfolio OS traffic, top-performing case studies, and a head-to-head comparison of the two projects the investor selected in the dashboard.",
+      182,
+    ),
+    14,
+    y,
+  );
+  y += 14;
 
   const totalViews = Object.values(a.projectViews).reduce((n, v) => n + v, 0);
   const totalClicks = Object.values(a.featureClicks).reduce((n, v) => n + v, 0);
@@ -228,7 +263,7 @@ export function downloadAnalyticsPdf(a: Analytics, compare?: [string, string]) {
   if (compare) {
     y += 6;
     doc.setFont("helvetica", "bold").setFontSize(12).setTextColor(230, 57, 70);
-    doc.text("HEAD-TO-HEAD", 14, y); y += 6;
+    doc.text("COMPARISON SUMMARY", 14, y); y += 6;
     doc.setFont("helvetica", "normal").setFontSize(10).setTextColor(30, 30, 30);
     const [a1, a2] = compare.map((s) => PROJECTS.find((p) => p.slug === s));
     if (a1 && a2) {
@@ -247,6 +282,27 @@ export function downloadAnalyticsPdf(a: Analytics, compare?: [string, string]) {
       }
     }
   }
+
+  // New page: full featured case-study one-liners
+  doc.addPage();
+  header(doc, "Featured Case Studies", portrait);
+  let y2 = 46;
+  doc.setFontSize(10).setTextColor(30, 30, 30);
+  PROJECTS.slice(0, 12).forEach((p) => {
+    if (y2 > 265) { doc.addPage(); header(doc, "Featured Case Studies (cont.)", portrait); y2 = 46; }
+    doc.setFont("helvetica", "bold").setFontSize(11);
+    doc.text(`${p.title}`, 14, y2);
+    doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(120, 120, 120);
+    doc.text(p.category, 196, y2, { align: "right" });
+    y2 += 5;
+    doc.setTextColor(60, 60, 60).setFontSize(9);
+    const t = doc.splitTextToSize(p.tagline, 182);
+    doc.text(t, 14, y2); y2 += t.length * 4 + 2;
+    const met = p.metrics.slice(0, 3).map((m) => `${m.value} ${m.label}`).join(" · ");
+    if (met) { doc.setTextColor(230, 57, 70).setFontSize(9); doc.text(met, 14, y2); y2 += 6; }
+    doc.setTextColor(30, 30, 30);
+    y2 += 3;
+  });
 
   footer(doc);
   saveAs(doc, `investor-analytics-${Date.now()}.pdf`);

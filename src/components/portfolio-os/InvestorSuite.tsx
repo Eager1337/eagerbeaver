@@ -185,8 +185,8 @@ function AnalyticsPanel() {
             <button onClick={() => downloadAnalyticsCsv(a, [compareA, compareB])} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/80 hover:bg-white hover:text-black">
               <FileSpreadsheet className="h-3 w-3" /> Export CSV
             </button>
-            <button onClick={() => downloadAnalyticsPdf(a, [compareA, compareB])} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/80 hover:bg-white hover:text-black">
-              <FileText className="h-3 w-3" /> Export PDF
+            <button onClick={() => { void downloadAnalyticsPdf(a, [compareA, compareB]); }} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/80 hover:bg-white hover:text-black">
+              <FileText className="h-3 w-3" /> Investor Analytics Pack (PDF)
             </button>
             <button onClick={() => { resetAnalytics(); setA(readAnalytics()); }} className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/70 hover:text-white">
               <Trash2 className="h-3 w-3" /> Reset
