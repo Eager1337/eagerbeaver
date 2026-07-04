@@ -16,6 +16,7 @@ import { Route as LegendsRouteImport } from './routes/legends'
 import { Route as HaloRouteImport } from './routes/halo'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SkyeliteIndexRouteImport } from './routes/skyelite.index'
 import { Route as PortfolioOsIndexRouteImport } from './routes/portfolio-os.index'
@@ -34,6 +35,7 @@ import { Route as SkyeliteBenefitsRouteImport } from './routes/skyelite.benefits
 import { Route as PortfolioOsSuiteRouteImport } from './routes/portfolio-os.suite'
 import { Route as PortfolioOsSlugRouteImport } from './routes/portfolio-os.$slug'
 import { Route as LegendsSlugRouteImport } from './routes/legends.$slug'
+import { Route as LandingSlugRouteImport } from './routes/landing.$slug'
 import { Route as ExploreSlugRouteImport } from './routes/explore.$slug'
 
 const SkyeliteRoute = SkyeliteRouteImport.update({
@@ -69,6 +71,11 @@ const ExploreRoute = ExploreRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -161,6 +168,11 @@ const LegendsSlugRoute = LegendsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => LegendsRoute,
 } as any)
+const LandingSlugRoute = LandingSlugRouteImport.update({
+  id: '/landing/$slug',
+  path: '/landing/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExploreSlugRoute = ExploreSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -169,6 +181,7 @@ const ExploreSlugRoute = ExploreSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/contact': typeof ContactRoute
   '/explore': typeof ExploreRouteWithChildren
   '/halo': typeof HaloRoute
@@ -177,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/portfolio-os': typeof PortfolioOsRouteWithChildren
   '/skyelite': typeof SkyeliteRouteWithChildren
   '/explore/$slug': typeof ExploreSlugRoute
+  '/landing/$slug': typeof LandingSlugRoute
   '/legends/$slug': typeof LegendsSlugRoute
   '/portfolio-os/$slug': typeof PortfolioOsSlugRoute
   '/portfolio-os/suite': typeof PortfolioOsSuiteRoute
@@ -197,11 +211,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/contact': typeof ContactRoute
   '/explore': typeof ExploreRouteWithChildren
   '/halo': typeof HaloRoute
   '/portfolio': typeof PortfolioRoute
   '/explore/$slug': typeof ExploreSlugRoute
+  '/landing/$slug': typeof LandingSlugRoute
   '/legends/$slug': typeof LegendsSlugRoute
   '/portfolio-os/$slug': typeof PortfolioOsSlugRoute
   '/portfolio-os/suite': typeof PortfolioOsSuiteRoute
@@ -223,6 +239,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/contact': typeof ContactRoute
   '/explore': typeof ExploreRouteWithChildren
   '/halo': typeof HaloRoute
@@ -231,6 +248,7 @@ export interface FileRoutesById {
   '/portfolio-os': typeof PortfolioOsRouteWithChildren
   '/skyelite': typeof SkyeliteRouteWithChildren
   '/explore/$slug': typeof ExploreSlugRoute
+  '/landing/$slug': typeof LandingSlugRoute
   '/legends/$slug': typeof LegendsSlugRoute
   '/portfolio-os/$slug': typeof PortfolioOsSlugRoute
   '/portfolio-os/suite': typeof PortfolioOsSuiteRoute
@@ -253,6 +271,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/contact'
     | '/explore'
     | '/halo'
@@ -261,6 +280,7 @@ export interface FileRouteTypes {
     | '/portfolio-os'
     | '/skyelite'
     | '/explore/$slug'
+    | '/landing/$slug'
     | '/legends/$slug'
     | '/portfolio-os/$slug'
     | '/portfolio-os/suite'
@@ -281,11 +301,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/contact'
     | '/explore'
     | '/halo'
     | '/portfolio'
     | '/explore/$slug'
+    | '/landing/$slug'
     | '/legends/$slug'
     | '/portfolio-os/$slug'
     | '/portfolio-os/suite'
@@ -306,6 +328,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/contact'
     | '/explore'
     | '/halo'
@@ -314,6 +337,7 @@ export interface FileRouteTypes {
     | '/portfolio-os'
     | '/skyelite'
     | '/explore/$slug'
+    | '/landing/$slug'
     | '/legends/$slug'
     | '/portfolio-os/$slug'
     | '/portfolio-os/suite'
@@ -335,6 +359,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   ContactRoute: typeof ContactRoute
   ExploreRoute: typeof ExploreRouteWithChildren
   HaloRoute: typeof HaloRoute
@@ -342,6 +367,7 @@ export interface RootRouteChildren {
   PortfolioRoute: typeof PortfolioRoute
   PortfolioOsRoute: typeof PortfolioOsRouteWithChildren
   SkyeliteRoute: typeof SkyeliteRouteWithChildren
+  LandingSlugRoute: typeof LandingSlugRoute
   WorkAeonRoute: typeof WorkAeonRoute
   WorkAuraiRoute: typeof WorkAuraiRoute
   WorkDatacoreRoute: typeof WorkDatacoreRoute
@@ -399,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -527,6 +560,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegendsSlugRouteImport
       parentRoute: typeof LegendsRoute
     }
+    '/landing/$slug': {
+      id: '/landing/$slug'
+      path: '/landing/$slug'
+      fullPath: '/landing/$slug'
+      preLoaderRoute: typeof LandingSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/explore/$slug': {
       id: '/explore/$slug'
       path: '/$slug'
@@ -601,6 +641,7 @@ const SkyeliteRouteWithChildren = SkyeliteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   ContactRoute: ContactRoute,
   ExploreRoute: ExploreRouteWithChildren,
   HaloRoute: HaloRoute,
@@ -608,6 +649,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioRoute: PortfolioRoute,
   PortfolioOsRoute: PortfolioOsRouteWithChildren,
   SkyeliteRoute: SkyeliteRouteWithChildren,
+  LandingSlugRoute: LandingSlugRoute,
   WorkAeonRoute: WorkAeonRoute,
   WorkAuraiRoute: WorkAuraiRoute,
   WorkDatacoreRoute: WorkDatacoreRoute,
