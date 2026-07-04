@@ -2,12 +2,32 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard, Image as ImageIcon, Sparkles, DollarSign, Compass, Rocket, User,
-  Plus, Trash2, Save, LogOut, Lock, ShieldCheck, Download, Upload, RotateCcw, ExternalLink,
+  LayoutDashboard,
+  Image as ImageIcon,
+  Sparkles,
+  DollarSign,
+  Compass,
+  Rocket,
+  User,
+  Plus,
+  Trash2,
+  Save,
+  LogOut,
+  Lock,
+  ShieldCheck,
+  Download,
+  Upload,
+  RotateCcw,
+  ExternalLink,
 } from "lucide-react";
 import {
-  useContent, checkCredentials, isAdminAuthed, setAdminAuthed,
-  type ToonSlide, type PricingTier, type CustomLanding,
+  useContent,
+  checkCredentials,
+  isAdminAuthed,
+  setAdminAuthed,
+  type ToonSlide,
+  type PricingTier,
+  type CustomLanding,
 } from "../lib/content-store";
 import type { Legend } from "../data/legends";
 import type { Project, ProjectCategory } from "../data/projects";
@@ -17,7 +37,11 @@ export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
       { title: "Admin — Portfolio content control" },
-      { name: "description", content: "Sign-in gated admin dashboard to manage Legends, ToonHub, pricing, Explore projects, and custom landing pages." },
+      {
+        name: "description",
+        content:
+          "Sign-in gated admin dashboard to manage Legends, ToonHub, pricing, Explore projects, and custom landing pages.",
+      },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -28,7 +52,14 @@ function AdminGate() {
   const [authed, setAuthed] = useState(false);
   useEffect(() => setAuthed(isAdminAuthed()), []);
   if (!authed) return <SignIn onAuthed={() => setAuthed(true)} />;
-  return <AdminDashboard onSignOut={() => { setAdminAuthed(false); setAuthed(false); }} />;
+  return (
+    <AdminDashboard
+      onSignOut={() => {
+        setAdminAuthed(false);
+        setAuthed(false);
+      }}
+    />
+  );
 }
 
 /* ---------------- Sign-in ---------------- */
@@ -57,14 +88,22 @@ function SignIn({ onAuthed }: { onAuthed: () => void }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#050510] text-white">
       {/* animated gradient background */}
-      <div className="absolute inset-0 opacity-70" style={{
-        background: "radial-gradient(60% 45% at 15% 20%, rgba(168,85,247,0.35), transparent 60%), radial-gradient(50% 40% at 85% 30%, rgba(56,189,248,0.35), transparent 60%), radial-gradient(45% 45% at 50% 90%, rgba(236,72,153,0.28), transparent 60%)",
-      }} />
-      <div className="absolute inset-0" style={{
-        backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-        backgroundSize: "48px 48px",
-        maskImage: "radial-gradient(ellipse at center, black 40%, transparent 75%)",
-      }} />
+      <div
+        className="absolute inset-0 opacity-70"
+        style={{
+          background:
+            "radial-gradient(60% 45% at 15% 20%, rgba(168,85,247,0.35), transparent 60%), radial-gradient(50% 40% at 85% 30%, rgba(56,189,248,0.35), transparent 60%), radial-gradient(45% 45% at 50% 90%, rgba(236,72,153,0.28), transparent 60%)",
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 75%)",
+        }}
+      />
 
       {/* floating orbs */}
       {[0, 1, 2].map((i) => (
@@ -96,18 +135,28 @@ function SignIn({ onAuthed }: { onAuthed: () => void }) {
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div>
-                <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">Portfolio OS</div>
-                <h1 className="text-2xl font-black tracking-tight" style={{ fontFamily: "'Kanit', sans-serif" }}>Command Center</h1>
+                <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">
+                  Portfolio OS
+                </div>
+                <h1
+                  className="text-2xl font-black tracking-tight"
+                  style={{ fontFamily: "'Kanit', sans-serif" }}
+                >
+                  Command Center
+                </h1>
               </div>
             </div>
 
             <p className="mt-4 text-sm text-white/60">
-              Sign in to edit Legends, ToonHub, pricing, Explore projects and add landing pages — no code required.
+              Sign in to edit Legends, ToonHub, pricing, Explore projects and add landing pages — no
+              code required.
             </p>
 
             <form onSubmit={submit} className="mt-6 space-y-4">
               <label className="block">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">Username</span>
+                <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
+                  Username
+                </span>
                 <input
                   autoFocus
                   value={user}
@@ -118,7 +167,9 @@ function SignIn({ onAuthed }: { onAuthed: () => void }) {
                 />
               </label>
               <label className="block">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">Password</span>
+                <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
+                  Password
+                </span>
                 <div className="relative mt-1.5">
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
                   <input
@@ -149,7 +200,9 @@ function SignIn({ onAuthed }: { onAuthed: () => void }) {
             </form>
 
             <div className="mt-6 flex items-center justify-between text-[11px] text-white/40">
-              <Link to="/" className="hover:text-white">← Back to site</Link>
+              <Link to="/" className="hover:text-white">
+                ← Back to site
+              </Link>
               <span>Local-only session</span>
             </div>
           </div>
@@ -212,26 +265,46 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
               <ShieldCheck className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-[9px] uppercase tracking-[0.3em] text-white/50">Portfolio OS · Admin</div>
+              <div className="text-[9px] uppercase tracking-[0.3em] text-white/50">
+                Portfolio OS · Admin
+              </div>
               <div className="text-sm font-semibold">Command Center</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={exportJson} className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10">
+            <button
+              onClick={exportJson}
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10"
+            >
               <Download className="h-3.5 w-3.5" /> Export
             </button>
             <label className="hidden sm:inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10">
               <Upload className="h-3.5 w-3.5" /> Import
-              <input type="file" accept="application/json" className="hidden" onChange={(e) => e.target.files?.[0] && importJson(e.target.files[0])} />
+              <input
+                type="file"
+                accept="application/json"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && importJson(e.target.files[0])}
+              />
             </label>
             <button
-              onClick={() => { if (confirm("Reset all content to defaults?")) store.reset(); }}
+              onClick={() => {
+                if (confirm("Reset all content to defaults?")) store.reset();
+              }}
               className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-1.5 text-xs text-amber-200 hover:bg-amber-400/20"
             >
               <RotateCcw className="h-3.5 w-3.5" /> Reset
             </button>
-            <button onClick={() => navigate({ to: "/" })} className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10">View site</button>
-            <button onClick={onSignOut} className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs hover:bg-white/20">
+            <button
+              onClick={() => navigate({ to: "/" })}
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10"
+            >
+              View site
+            </button>
+            <button
+              onClick={onSignOut}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs hover:bg-white/20"
+            >
               <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
           </div>
@@ -289,7 +362,9 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
 
 function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur ${className}`}>
+    <div
+      className={`rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur ${className}`}
+    >
       {children}
     </div>
   );
@@ -298,7 +373,9 @@ function Card({ children, className = "" }: { children: ReactNode; className?: s
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[10px] uppercase tracking-[0.2em] text-white/50">{label}</span>
+      <span className="mb-1.5 block text-[10px] uppercase tracking-[0.2em] text-white/50">
+        {label}
+      </span>
       {children}
     </label>
   );
@@ -322,11 +399,24 @@ function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   );
 }
 
-function SectionHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
+function SectionHeader({
+  title,
+  subtitle,
+  action,
+}: {
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
+}) {
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h2 className="text-2xl font-black tracking-tight" style={{ fontFamily: "'Kanit', sans-serif" }}>{title}</h2>
+        <h2
+          className="text-2xl font-black tracking-tight"
+          style={{ fontFamily: "'Kanit', sans-serif" }}
+        >
+          {title}
+        </h2>
         {subtitle && <p className="mt-1 text-sm text-white/60">{subtitle}</p>}
       </div>
       {action}
@@ -372,31 +462,86 @@ function DangerBtn({ children, ...props }: React.ButtonHTMLAttributes<HTMLButton
 function OverviewPanel() {
   const { toonSlides, legends, pricing, projects, landings } = useContent();
   const stats = [
-    { label: "ToonHub slides", value: toonSlides.length, color: "from-fuchsia-500 to-pink-500", to: "/" },
-    { label: "Legends", value: legends.length, color: "from-amber-400 to-orange-500", to: "/legends" },
-    { label: "Pricing tiers", value: pricing.length, color: "from-emerald-400 to-teal-500", to: "/portfolio#pricing" },
-    { label: "Explore projects", value: projects.length, color: "from-sky-400 to-indigo-500", to: "/explore" },
-    { label: "Custom landings", value: landings.length, color: "from-rose-400 to-fuchsia-500", to: "/admin" },
+    {
+      label: "ToonHub slides",
+      value: toonSlides.length,
+      color: "from-fuchsia-500 to-pink-500",
+      to: "/",
+    },
+    {
+      label: "Legends",
+      value: legends.length,
+      color: "from-amber-400 to-orange-500",
+      to: "/legends",
+    },
+    {
+      label: "Pricing tiers",
+      value: pricing.length,
+      color: "from-emerald-400 to-teal-500",
+      to: "/portfolio#pricing",
+    },
+    {
+      label: "Explore projects",
+      value: projects.length,
+      color: "from-sky-400 to-indigo-500",
+      to: "/explore",
+    },
+    {
+      label: "Custom landings",
+      value: landings.length,
+      color: "from-rose-400 to-fuchsia-500",
+      to: "/admin",
+    },
   ];
   return (
     <>
-      <SectionHeader title="Welcome back, Eager Beaver." subtitle="Every change here saves instantly and takes effect across the live site." />
+      <SectionHeader
+        title="Welcome back, Eager Beaver."
+        subtitle="Every change here saves instantly and takes effect across the live site."
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
           <Card key={s.label} className="relative overflow-hidden">
-            <div className={`absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br ${s.color} opacity-30 blur-2xl`} />
+            <div
+              className={`absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br ${s.color} opacity-30 blur-2xl`}
+            />
             <div className="text-[11px] uppercase tracking-[0.2em] text-white/50">{s.label}</div>
-            <div className="mt-2 text-5xl font-black tracking-tight" style={{ fontFamily: "'Kanit', sans-serif" }}>{s.value}</div>
+            <div
+              className="mt-2 text-5xl font-black tracking-tight"
+              style={{ fontFamily: "'Kanit', sans-serif" }}
+            >
+              {s.value}
+            </div>
           </Card>
         ))}
       </div>
       <Card className="mt-5">
         <h3 className="text-sm font-semibold">Quick actions</h3>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Link to="/" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10">Preview home</Link>
-          <Link to="/explore" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10">Preview Explore</Link>
-          <Link to="/legends" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10">Preview Legends</Link>
-          <Link to="/portfolio" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10">Preview Portfolio</Link>
+          <Link
+            to="/"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10"
+          >
+            Preview home
+          </Link>
+          <Link
+            to="/explore"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10"
+          >
+            Preview Explore
+          </Link>
+          <Link
+            to="/legends"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10"
+          >
+            Preview Legends
+          </Link>
+          <Link
+            to="/portfolio"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10"
+          >
+            Preview Portfolio
+          </Link>
         </div>
       </Card>
     </>
@@ -421,13 +566,39 @@ function ToonHubPanel() {
 
   return (
     <>
-      <SectionHeader title="ToonHub Slides" subtitle="These appear in the homepage carousel (after the built-in 10)." />
+      <SectionHeader
+        title="ToonHub Slides"
+        subtitle="These appear in the homepage carousel (after the built-in 10)."
+      />
       <Card className="mb-5">
         <div className="grid gap-3 md:grid-cols-[1fr_180px_1fr_auto]">
-          <Field label="Image URL"><TextInput value={draft.src} onChange={(e) => setDraft({ ...draft, src: e.target.value })} placeholder="https://…/image.png" /></Field>
-          <Field label="Background color"><TextInput type="color" value={draft.bg} onChange={(e) => setDraft({ ...draft, bg: e.target.value })} className="h-10 w-full cursor-pointer p-1" /></Field>
-          <Field label="Label"><TextInput value={draft.label} onChange={(e) => setDraft({ ...draft, label: e.target.value })} placeholder="e.g. Ninja Turtle" /></Field>
-          <div className="flex items-end"><PrimaryBtn onClick={add}><Plus className="h-3.5 w-3.5" /> Add slide</PrimaryBtn></div>
+          <Field label="Image URL">
+            <TextInput
+              value={draft.src}
+              onChange={(e) => setDraft({ ...draft, src: e.target.value })}
+              placeholder="https://…/image.png"
+            />
+          </Field>
+          <Field label="Background color">
+            <TextInput
+              type="color"
+              value={draft.bg}
+              onChange={(e) => setDraft({ ...draft, bg: e.target.value })}
+              className="h-10 w-full cursor-pointer p-1"
+            />
+          </Field>
+          <Field label="Label">
+            <TextInput
+              value={draft.label}
+              onChange={(e) => setDraft({ ...draft, label: e.target.value })}
+              placeholder="e.g. Ninja Turtle"
+            />
+          </Field>
+          <div className="flex items-end">
+            <PrimaryBtn onClick={add}>
+              <Plus className="h-3.5 w-3.5" /> Add slide
+            </PrimaryBtn>
+          </div>
         </div>
       </Card>
 
@@ -440,15 +611,30 @@ function ToonHubPanel() {
             <div className="mt-3 space-y-2">
               <TextInput value={s.label} onChange={(e) => patch(s.id, { label: e.target.value })} />
               <div className="flex gap-2">
-                <TextInput value={s.src} onChange={(e) => patch(s.id, { src: e.target.value })} className="flex-1" />
-                <input type="color" value={s.bg} onChange={(e) => patch(s.id, { bg: e.target.value })} className="h-9 w-12 cursor-pointer rounded border border-white/15 bg-black/40 p-0.5" />
+                <TextInput
+                  value={s.src}
+                  onChange={(e) => patch(s.id, { src: e.target.value })}
+                  className="flex-1"
+                />
+                <input
+                  type="color"
+                  value={s.bg}
+                  onChange={(e) => patch(s.id, { bg: e.target.value })}
+                  className="h-9 w-12 cursor-pointer rounded border border-white/15 bg-black/40 p-0.5"
+                />
               </div>
-              <DangerBtn onClick={() => remove(s.id)}><Trash2 className="h-3.5 w-3.5" /> Delete</DangerBtn>
+              <DangerBtn onClick={() => remove(s.id)}>
+                <Trash2 className="h-3.5 w-3.5" /> Delete
+              </DangerBtn>
             </div>
           </Card>
         ))}
         {toonSlides.length === 0 && (
-          <Card><p className="text-sm text-white/50">No custom slides yet. The site still shows the 10 built-in ToonHub images.</p></Card>
+          <Card>
+            <p className="text-sm text-white/50">
+              No custom slides yet. The site still shows the 10 built-in ToonHub images.
+            </p>
+          </Card>
         )}
       </div>
     </>
@@ -489,7 +675,11 @@ function LegendsPanel() {
       <SectionHeader
         title="Legends"
         subtitle="Manage the cinematic looping landing pages."
-        action={<PrimaryBtn onClick={addLegend}><Plus className="h-3.5 w-3.5" /> Add Legend</PrimaryBtn>}
+        action={
+          <PrimaryBtn onClick={addLegend}>
+            <Plus className="h-3.5 w-3.5" /> Add Legend
+          </PrimaryBtn>
+        }
       />
       <div className="space-y-3">
         {legends.map((l) => {
@@ -500,11 +690,16 @@ function LegendsPanel() {
                 onClick={() => setOpenId(isOpen ? null : l.slug)}
                 className="flex w-full items-center gap-4 p-4 text-left hover:bg-white/[0.03]"
               >
-                <div className="h-14 w-24 shrink-0 overflow-hidden rounded-lg" style={{ background: l.bg }}>
+                <div
+                  className="h-14 w-24 shrink-0 overflow-hidden rounded-lg"
+                  style={{ background: l.bg }}
+                >
                   {l.image && <img src={l.image} alt="" className="h-full w-full object-cover" />}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs uppercase tracking-widest" style={{ color: l.accent }}>{l.kicker}</div>
+                  <div className="text-xs uppercase tracking-widest" style={{ color: l.accent }}>
+                    {l.kicker}
+                  </div>
                   <div className="truncate text-lg font-semibold">{l.title}</div>
                   <div className="truncate text-xs text-white/50">{l.tagline}</div>
                 </div>
@@ -513,29 +708,111 @@ function LegendsPanel() {
               {isOpen && (
                 <div className="border-t border-white/10 p-4">
                   <div className="grid gap-3 md:grid-cols-2">
-                    <Field label="Title"><TextInput value={l.title} onChange={(e) => patch(l.slug, { title: e.target.value })} /></Field>
-                    <Field label="Kicker"><TextInput value={l.kicker} onChange={(e) => patch(l.slug, { kicker: e.target.value })} /></Field>
-                    <Field label="Tagline"><TextInput value={l.tagline} onChange={(e) => patch(l.slug, { tagline: e.target.value })} /></Field>
-                    <Field label="Image URL"><TextInput value={l.image} onChange={(e) => patch(l.slug, { image: e.target.value })} /></Field>
-                    <Field label="Accent color"><TextInput type="color" value={l.accent} onChange={(e) => patch(l.slug, { accent: e.target.value })} className="h-10 p-1" /></Field>
-                    <Field label="Background color"><TextInput type="color" value={l.bg} onChange={(e) => patch(l.slug, { bg: e.target.value })} className="h-10 p-1" /></Field>
+                    <Field label="Title">
+                      <TextInput
+                        value={l.title}
+                        onChange={(e) => patch(l.slug, { title: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Kicker">
+                      <TextInput
+                        value={l.kicker}
+                        onChange={(e) => patch(l.slug, { kicker: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Tagline">
+                      <TextInput
+                        value={l.tagline}
+                        onChange={(e) => patch(l.slug, { tagline: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Image URL">
+                      <TextInput
+                        value={l.image}
+                        onChange={(e) => patch(l.slug, { image: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Accent color">
+                      <TextInput
+                        type="color"
+                        value={l.accent}
+                        onChange={(e) => patch(l.slug, { accent: e.target.value })}
+                        className="h-10 p-1"
+                      />
+                    </Field>
+                    <Field label="Background color">
+                      <TextInput
+                        type="color"
+                        value={l.bg}
+                        onChange={(e) => patch(l.slug, { bg: e.target.value })}
+                        className="h-10 p-1"
+                      />
+                    </Field>
                     <Field label="Stack (comma separated)">
-                      <TextInput value={l.stack.join(", ")} onChange={(e) => patch(l.slug, { stack: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} />
+                      <TextInput
+                        value={l.stack.join(", ")}
+                        onChange={(e) =>
+                          patch(l.slug, {
+                            stack: e.target.value
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean),
+                          })
+                        }
+                      />
                     </Field>
                     <Field label="Animation">
-                      <select value={l.animation} onChange={(e) => patch(l.slug, { animation: e.target.value as Legend["animation"] })} className="w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm">
-                        {["clash","smile","walk","mirror","ember","swing","eyeGlow","hoop","train","orbit"].map((a) => <option key={a} value={a}>{a}</option>)}
+                      <select
+                        value={l.animation}
+                        onChange={(e) =>
+                          patch(l.slug, { animation: e.target.value as Legend["animation"] })
+                        }
+                        className="w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm"
+                      >
+                        {[
+                          "clash",
+                          "smile",
+                          "walk",
+                          "mirror",
+                          "ember",
+                          "swing",
+                          "eyeGlow",
+                          "hoop",
+                          "train",
+                          "orbit",
+                        ].map((a) => (
+                          <option key={a} value={a}>
+                            {a}
+                          </option>
+                        ))}
                       </select>
                     </Field>
                   </div>
                   <div className="mt-3">
-                    <Field label="Story"><TextArea rows={5} value={l.story} onChange={(e) => patch(l.slug, { story: e.target.value })} /></Field>
+                    <Field label="Story">
+                      <TextArea
+                        rows={5}
+                        value={l.story}
+                        onChange={(e) => patch(l.slug, { story: e.target.value })}
+                      />
+                    </Field>
                   </div>
                   <div className="mt-3 flex items-center justify-between">
-                    <Link to="/legends/$slug" params={{ slug: l.slug }} target="_blank" className="inline-flex items-center gap-1.5 text-xs text-sky-300 hover:underline">
+                    <Link
+                      to="/legends/$slug"
+                      params={{ slug: l.slug }}
+                      target="_blank"
+                      className="inline-flex items-center gap-1.5 text-xs text-sky-300 hover:underline"
+                    >
                       <ExternalLink className="h-3.5 w-3.5" /> Open landing page
                     </Link>
-                    <DangerBtn onClick={() => { if (confirm(`Delete "${l.title}"?`)) remove(l.slug); }}><Trash2 className="h-3.5 w-3.5" /> Delete</DangerBtn>
+                    <DangerBtn
+                      onClick={() => {
+                        if (confirm(`Delete "${l.title}"?`)) remove(l.slug);
+                      }}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Delete
+                    </DangerBtn>
                   </div>
                 </div>
               )}
@@ -554,33 +831,78 @@ function PricingPanel() {
   const patch = (id: string, p: Partial<PricingTier>) =>
     update({ pricing: pricing.map((t) => (t.id === id ? { ...t, ...p } : t)) });
   const add = () => {
-    const nt: PricingTier = { id: `tier_${Date.now()}`, name: "New Tier", price: "$0", weeks: "1 week", best: false, inc: ["Feature one", "Feature two"] };
+    const nt: PricingTier = {
+      id: `tier_${Date.now()}`,
+      name: "New Tier",
+      price: "$0",
+      weeks: "1 week",
+      best: false,
+      inc: ["Feature one", "Feature two"],
+    };
     update({ pricing: [...pricing, nt] });
   };
   const remove = (id: string) => update({ pricing: pricing.filter((t) => t.id !== id) });
 
   return (
     <>
-      <SectionHeader title="Pricing Tiers" subtitle="Shown in Portfolio → Investment section." action={<PrimaryBtn onClick={add}><Plus className="h-3.5 w-3.5" /> Add tier</PrimaryBtn>} />
+      <SectionHeader
+        title="Pricing Tiers"
+        subtitle="Shown in Portfolio → Investment section."
+        action={
+          <PrimaryBtn onClick={add}>
+            <Plus className="h-3.5 w-3.5" /> Add tier
+          </PrimaryBtn>
+        }
+      />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {pricing.map((t) => (
           <Card key={t.id} className={t.best ? "border-fuchsia-400/50" : ""}>
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Tier</span>
               <label className="inline-flex items-center gap-1.5 text-[10px] text-white/60">
-                <input type="checkbox" checked={t.best} onChange={(e) => patch(t.id, { best: e.target.checked })} /> Most popular
+                <input
+                  type="checkbox"
+                  checked={t.best}
+                  onChange={(e) => patch(t.id, { best: e.target.checked })}
+                />{" "}
+                Most popular
               </label>
             </div>
             <div className="mt-2 space-y-2">
-              <Field label="Name"><TextInput value={t.name} onChange={(e) => patch(t.id, { name: e.target.value })} /></Field>
+              <Field label="Name">
+                <TextInput value={t.name} onChange={(e) => patch(t.id, { name: e.target.value })} />
+              </Field>
               <div className="grid grid-cols-2 gap-2">
-                <Field label="Price"><TextInput value={t.price} onChange={(e) => patch(t.id, { price: e.target.value })} /></Field>
-                <Field label="Timeline"><TextInput value={t.weeks} onChange={(e) => patch(t.id, { weeks: e.target.value })} /></Field>
+                <Field label="Price">
+                  <TextInput
+                    value={t.price}
+                    onChange={(e) => patch(t.id, { price: e.target.value })}
+                  />
+                </Field>
+                <Field label="Timeline">
+                  <TextInput
+                    value={t.weeks}
+                    onChange={(e) => patch(t.id, { weeks: e.target.value })}
+                  />
+                </Field>
               </div>
               <Field label="Included features (one per line)">
-                <TextArea rows={5} value={t.inc.join("\n")} onChange={(e) => patch(t.id, { inc: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })} />
+                <TextArea
+                  rows={5}
+                  value={t.inc.join("\n")}
+                  onChange={(e) =>
+                    patch(t.id, {
+                      inc: e.target.value
+                        .split("\n")
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                />
               </Field>
-              <DangerBtn onClick={() => remove(t.id)}><Trash2 className="h-3.5 w-3.5" /> Delete tier</DangerBtn>
+              <DangerBtn onClick={() => remove(t.id)}>
+                <Trash2 className="h-3.5 w-3.5" /> Delete tier
+              </DangerBtn>
             </div>
           </Card>
         ))}
@@ -596,7 +918,13 @@ function ExplorePanel() {
   const [q, setQ] = useState("");
   const [openSlug, setOpenSlug] = useState<string | null>(null);
   const filtered = useMemo(
-    () => projects.filter((p) => !q || p.title.toLowerCase().includes(q.toLowerCase()) || p.category.toLowerCase().includes(q.toLowerCase())),
+    () =>
+      projects.filter(
+        (p) =>
+          !q ||
+          p.title.toLowerCase().includes(q.toLowerCase()) ||
+          p.category.toLowerCase().includes(q.toLowerCase()),
+      ),
     [q, projects],
   );
 
@@ -605,10 +933,18 @@ function ExplorePanel() {
   const add = () => {
     const slug = `project-${Date.now()}`;
     const np: Project = {
-      slug, title: "New Project", category: "Business" as ProjectCategory, tagline: "One-line hook.",
-      preview: "linear-gradient(135deg,#a855f7,#38bdf8)", accent: "#a855f7",
-      problem: "", solution: "", stack: ["React"], features: ["Feature"],
-      metrics: [{ label: "Users", value: "100" }], demo: "",
+      slug,
+      title: "New Project",
+      category: "Business" as ProjectCategory,
+      tagline: "One-line hook.",
+      preview: "linear-gradient(135deg,#a855f7,#38bdf8)",
+      accent: "#a855f7",
+      problem: "",
+      solution: "",
+      stack: ["React"],
+      features: ["Feature"],
+      metrics: [{ label: "Users", value: "100" }],
+      demo: "",
     };
     update({ projects: [np, ...projects] });
     setOpenSlug(slug);
@@ -620,19 +956,34 @@ function ExplorePanel() {
       <SectionHeader
         title="Explore Projects"
         subtitle={`${projects.length} projects powering the /explore grid.`}
-        action={<PrimaryBtn onClick={add}><Plus className="h-3.5 w-3.5" /> New project</PrimaryBtn>}
+        action={
+          <PrimaryBtn onClick={add}>
+            <Plus className="h-3.5 w-3.5" /> New project
+          </PrimaryBtn>
+        }
       />
-      <Card className="mb-4"><TextInput placeholder="Search by title or category…" value={q} onChange={(e) => setQ(e.target.value)} /></Card>
+      <Card className="mb-4">
+        <TextInput
+          placeholder="Search by title or category…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
+      </Card>
       <div className="space-y-2">
         {filtered.map((p) => {
           const isOpen = openSlug === p.slug;
           return (
             <Card key={p.slug} className="!p-0">
-              <button onClick={() => setOpenSlug(isOpen ? null : p.slug)} className="flex w-full items-center gap-3 p-3 text-left hover:bg-white/[0.03]">
+              <button
+                onClick={() => setOpenSlug(isOpen ? null : p.slug)}
+                className="flex w-full items-center gap-3 p-3 text-left hover:bg-white/[0.03]"
+              >
                 <div className="h-12 w-20 shrink-0 rounded-md" style={{ background: p.preview }} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-widest text-white/60">{p.category}</span>
+                    <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-widest text-white/60">
+                      {p.category}
+                    </span>
                     <span className="truncate text-sm font-semibold">{p.title}</span>
                   </div>
                   <div className="truncate text-xs text-white/50">{p.tagline}</div>
@@ -642,28 +993,111 @@ function ExplorePanel() {
               {isOpen && (
                 <div className="border-t border-white/10 p-4">
                   <div className="grid gap-3 md:grid-cols-2">
-                    <Field label="Title"><TextInput value={p.title} onChange={(e) => patch(p.slug, { title: e.target.value })} /></Field>
+                    <Field label="Title">
+                      <TextInput
+                        value={p.title}
+                        onChange={(e) => patch(p.slug, { title: e.target.value })}
+                      />
+                    </Field>
                     <Field label="Category">
-                      <select value={p.category} onChange={(e) => patch(p.slug, { category: e.target.value as ProjectCategory })} className="w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm">
-                        {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                      <select
+                        value={p.category}
+                        onChange={(e) =>
+                          patch(p.slug, { category: e.target.value as ProjectCategory })
+                        }
+                        className="w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm"
+                      >
+                        {CATEGORIES.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
                       </select>
                     </Field>
-                    <Field label="Tagline"><TextInput value={p.tagline} onChange={(e) => patch(p.slug, { tagline: e.target.value })} /></Field>
-                    <Field label="Accent color"><TextInput type="color" value={p.accent} onChange={(e) => patch(p.slug, { accent: e.target.value })} className="h-10 p-1" /></Field>
-                    <Field label="Preview (CSS gradient / URL)"><TextInput value={p.preview} onChange={(e) => patch(p.slug, { preview: e.target.value })} /></Field>
-                    <Field label="Demo link"><TextInput value={p.demo} onChange={(e) => patch(p.slug, { demo: e.target.value })} placeholder="https://…" /></Field>
-                    <Field label="Stack (comma separated)"><TextInput value={p.stack.join(", ")} onChange={(e) => patch(p.slug, { stack: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
-                    <Field label="Features (comma separated)"><TextInput value={p.features.join(", ")} onChange={(e) => patch(p.slug, { features: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
+                    <Field label="Tagline">
+                      <TextInput
+                        value={p.tagline}
+                        onChange={(e) => patch(p.slug, { tagline: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Accent color">
+                      <TextInput
+                        type="color"
+                        value={p.accent}
+                        onChange={(e) => patch(p.slug, { accent: e.target.value })}
+                        className="h-10 p-1"
+                      />
+                    </Field>
+                    <Field label="Preview (CSS gradient / URL)">
+                      <TextInput
+                        value={p.preview}
+                        onChange={(e) => patch(p.slug, { preview: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Demo link">
+                      <TextInput
+                        value={p.demo}
+                        onChange={(e) => patch(p.slug, { demo: e.target.value })}
+                        placeholder="https://…"
+                      />
+                    </Field>
+                    <Field label="Stack (comma separated)">
+                      <TextInput
+                        value={p.stack.join(", ")}
+                        onChange={(e) =>
+                          patch(p.slug, {
+                            stack: e.target.value
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean),
+                          })
+                        }
+                      />
+                    </Field>
+                    <Field label="Features (comma separated)">
+                      <TextInput
+                        value={p.features.join(", ")}
+                        onChange={(e) =>
+                          patch(p.slug, {
+                            features: e.target.value
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean),
+                          })
+                        }
+                      />
+                    </Field>
                   </div>
                   <div className="mt-3 grid gap-3 md:grid-cols-2">
-                    <Field label="Problem"><TextArea rows={3} value={p.problem} onChange={(e) => patch(p.slug, { problem: e.target.value })} /></Field>
-                    <Field label="Solution"><TextArea rows={3} value={p.solution} onChange={(e) => patch(p.slug, { solution: e.target.value })} /></Field>
+                    <Field label="Problem">
+                      <TextArea
+                        rows={3}
+                        value={p.problem}
+                        onChange={(e) => patch(p.slug, { problem: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Solution">
+                      <TextArea
+                        rows={3}
+                        value={p.solution}
+                        onChange={(e) => patch(p.slug, { solution: e.target.value })}
+                      />
+                    </Field>
                   </div>
                   <div className="mt-3 flex items-center justify-between">
-                    <Link to="/explore" className="inline-flex items-center gap-1.5 text-xs text-sky-300 hover:underline">
+                    <Link
+                      to="/explore"
+                      className="inline-flex items-center gap-1.5 text-xs text-sky-300 hover:underline"
+                    >
                       <ExternalLink className="h-3.5 w-3.5" /> View in Explore
                     </Link>
-                    <DangerBtn onClick={() => { if (confirm(`Delete "${p.title}"?`)) remove(p.slug); }}><Trash2 className="h-3.5 w-3.5" /> Delete</DangerBtn>
+                    <DangerBtn
+                      onClick={() => {
+                        if (confirm(`Delete "${p.title}"?`)) remove(p.slug);
+                      }}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Delete
+                    </DangerBtn>
                   </div>
                 </div>
               )}
@@ -680,16 +1114,40 @@ function ExplorePanel() {
 function LandingsPanel() {
   const { landings, update } = useContent();
   const [draft, setDraft] = useState<CustomLanding>({
-    slug: "", title: "", kicker: "", tagline: "", body: "", image: "",
-    accent: "#a855f7", bg: "#050510", ctaLabel: "Learn more", ctaHref: "",
+    slug: "",
+    title: "",
+    kicker: "",
+    tagline: "",
+    body: "",
+    image: "",
+    accent: "#a855f7",
+    bg: "#050510",
+    ctaLabel: "Learn more",
+    ctaHref: "",
   });
 
   const add = () => {
-    const slug = (draft.slug || draft.title).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    if (!slug || !draft.title.trim() || !draft.ctaHref.trim()) return alert("Slug, title and CTA link required");
+    const slug = (draft.slug || draft.title)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    if (!slug || !draft.title.trim() || !draft.ctaHref.trim())
+      return alert("Slug, title and CTA link required");
     if (landings.some((l) => l.slug === slug)) return alert("Slug already exists");
     update({ landings: [...landings, { ...draft, slug }] });
-    setDraft({ slug: "", title: "", kicker: "", tagline: "", body: "", image: "", accent: "#a855f7", bg: "#050510", ctaLabel: "Learn more", ctaHref: "" });
+    setDraft({
+      slug: "",
+      title: "",
+      kicker: "",
+      tagline: "",
+      body: "",
+      image: "",
+      accent: "#a855f7",
+      bg: "#050510",
+      ctaLabel: "Learn more",
+      ctaHref: "",
+    });
   };
   const patch = (slug: string, p: Partial<CustomLanding>) =>
     update({ landings: landings.map((l) => (l.slug === slug ? { ...l, ...p } : l)) });
@@ -697,64 +1155,205 @@ function LandingsPanel() {
 
   return (
     <>
-      <SectionHeader title="Custom Landing Pages" subtitle="Just paste a link, title and a short pitch — a full landing page ships instantly at /landing/[slug]." />
+      <SectionHeader
+        title="Custom Landing Pages"
+        subtitle="Just paste a link, title and a short pitch — a full landing page ships instantly at /landing/[slug]."
+      />
 
       <Card className="mb-5">
         <h3 className="mb-3 text-sm font-semibold">Create new landing page</h3>
         <div className="grid gap-3 md:grid-cols-2">
-          <Field label="Title"><TextInput value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="Aurora Studio" /></Field>
-          <Field label="Slug (URL-safe)"><TextInput value={draft.slug} onChange={(e) => setDraft({ ...draft, slug: e.target.value })} placeholder="auto from title if empty" /></Field>
-          <Field label="Kicker"><TextInput value={draft.kicker} onChange={(e) => setDraft({ ...draft, kicker: e.target.value })} placeholder="Now live" /></Field>
-          <Field label="Tagline"><TextInput value={draft.tagline} onChange={(e) => setDraft({ ...draft, tagline: e.target.value })} placeholder="One-line hook" /></Field>
-          <Field label="Hero image URL"><TextInput value={draft.image} onChange={(e) => setDraft({ ...draft, image: e.target.value })} placeholder="https://…" /></Field>
-          <Field label="CTA link (deep-link)"><TextInput value={draft.ctaHref} onChange={(e) => setDraft({ ...draft, ctaHref: e.target.value })} placeholder="/explore or https://…" /></Field>
-          <Field label="CTA label"><TextInput value={draft.ctaLabel} onChange={(e) => setDraft({ ...draft, ctaLabel: e.target.value })} /></Field>
+          <Field label="Title">
+            <TextInput
+              value={draft.title}
+              onChange={(e) => setDraft({ ...draft, title: e.target.value })}
+              placeholder="Aurora Studio"
+            />
+          </Field>
+          <Field label="Slug (URL-safe)">
+            <TextInput
+              value={draft.slug}
+              onChange={(e) => setDraft({ ...draft, slug: e.target.value })}
+              placeholder="auto from title if empty"
+            />
+          </Field>
+          <Field label="Kicker">
+            <TextInput
+              value={draft.kicker}
+              onChange={(e) => setDraft({ ...draft, kicker: e.target.value })}
+              placeholder="Now live"
+            />
+          </Field>
+          <Field label="Tagline">
+            <TextInput
+              value={draft.tagline}
+              onChange={(e) => setDraft({ ...draft, tagline: e.target.value })}
+              placeholder="One-line hook"
+            />
+          </Field>
+          <Field label="Hero image URL">
+            <TextInput
+              value={draft.image}
+              onChange={(e) => setDraft({ ...draft, image: e.target.value })}
+              placeholder="https://…"
+            />
+          </Field>
+          <Field label="CTA link (deep-link)">
+            <TextInput
+              value={draft.ctaHref}
+              onChange={(e) => setDraft({ ...draft, ctaHref: e.target.value })}
+              placeholder="/explore or https://…"
+            />
+          </Field>
+          <Field label="CTA label">
+            <TextInput
+              value={draft.ctaLabel}
+              onChange={(e) => setDraft({ ...draft, ctaLabel: e.target.value })}
+            />
+          </Field>
           <div className="grid grid-cols-2 gap-2">
-            <Field label="Accent"><TextInput type="color" value={draft.accent} onChange={(e) => setDraft({ ...draft, accent: e.target.value })} className="h-10 p-1" /></Field>
-            <Field label="Background"><TextInput type="color" value={draft.bg} onChange={(e) => setDraft({ ...draft, bg: e.target.value })} className="h-10 p-1" /></Field>
+            <Field label="Accent">
+              <TextInput
+                type="color"
+                value={draft.accent}
+                onChange={(e) => setDraft({ ...draft, accent: e.target.value })}
+                className="h-10 p-1"
+              />
+            </Field>
+            <Field label="Background">
+              <TextInput
+                type="color"
+                value={draft.bg}
+                onChange={(e) => setDraft({ ...draft, bg: e.target.value })}
+                className="h-10 p-1"
+              />
+            </Field>
           </div>
         </div>
-        <div className="mt-3"><Field label="Body / pitch"><TextArea rows={4} value={draft.body} onChange={(e) => setDraft({ ...draft, body: e.target.value })} placeholder="A few paragraphs about what this page showcases…" /></Field></div>
-        <div className="mt-4"><PrimaryBtn onClick={add}><Rocket className="h-3.5 w-3.5" /> Publish landing page</PrimaryBtn></div>
+        <div className="mt-3">
+          <Field label="Body / pitch">
+            <TextArea
+              rows={4}
+              value={draft.body}
+              onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+              placeholder="A few paragraphs about what this page showcases…"
+            />
+          </Field>
+        </div>
+        <div className="mt-4">
+          <PrimaryBtn onClick={add}>
+            <Rocket className="h-3.5 w-3.5" /> Publish landing page
+          </PrimaryBtn>
+        </div>
       </Card>
 
       <div className="space-y-3">
         {landings.map((l) => (
           <Card key={l.slug}>
             <div className="flex items-start gap-4">
-              <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg" style={{ background: l.bg }}>
+              <div
+                className="h-16 w-24 shrink-0 overflow-hidden rounded-lg"
+                style={{ background: l.bg }}
+              >
                 {l.image && <img src={l.image} alt="" className="h-full w-full object-cover" />}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-[10px] uppercase tracking-widest" style={{ color: l.accent }}>{l.kicker || "Landing"}</div>
+                <div className="text-[10px] uppercase tracking-widest" style={{ color: l.accent }}>
+                  {l.kicker || "Landing"}
+                </div>
                 <div className="truncate text-lg font-semibold">{l.title}</div>
-                <div className="truncate text-xs text-white/50">/landing/{l.slug} → {l.ctaHref}</div>
+                <div className="truncate text-xs text-white/50">
+                  /landing/{l.slug} → {l.ctaHref}
+                </div>
               </div>
               <div className="flex flex-col gap-2">
-                <Link to="/landing/$slug" params={{ slug: l.slug }} target="_blank" className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10">
+                <Link
+                  to="/landing/$slug"
+                  params={{ slug: l.slug }}
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs hover:bg-white/10"
+                >
                   <ExternalLink className="h-3.5 w-3.5" /> Open
                 </Link>
-                <DangerBtn onClick={() => remove(l.slug)}><Trash2 className="h-3.5 w-3.5" /> Delete</DangerBtn>
+                <DangerBtn onClick={() => remove(l.slug)}>
+                  <Trash2 className="h-3.5 w-3.5" /> Delete
+                </DangerBtn>
               </div>
             </div>
             <details className="mt-3">
-              <summary className="cursor-pointer text-xs text-white/60 hover:text-white">Edit</summary>
+              <summary className="cursor-pointer text-xs text-white/60 hover:text-white">
+                Edit
+              </summary>
               <div className="mt-3 grid gap-3 md:grid-cols-2">
-                <Field label="Title"><TextInput value={l.title} onChange={(e) => patch(l.slug, { title: e.target.value })} /></Field>
-                <Field label="Kicker"><TextInput value={l.kicker} onChange={(e) => patch(l.slug, { kicker: e.target.value })} /></Field>
-                <Field label="Tagline"><TextInput value={l.tagline} onChange={(e) => patch(l.slug, { tagline: e.target.value })} /></Field>
-                <Field label="Image URL"><TextInput value={l.image} onChange={(e) => patch(l.slug, { image: e.target.value })} /></Field>
-                <Field label="CTA link"><TextInput value={l.ctaHref} onChange={(e) => patch(l.slug, { ctaHref: e.target.value })} /></Field>
-                <Field label="CTA label"><TextInput value={l.ctaLabel} onChange={(e) => patch(l.slug, { ctaLabel: e.target.value })} /></Field>
-                <Field label="Accent"><TextInput type="color" value={l.accent} onChange={(e) => patch(l.slug, { accent: e.target.value })} className="h-10 p-1" /></Field>
-                <Field label="Background"><TextInput type="color" value={l.bg} onChange={(e) => patch(l.slug, { bg: e.target.value })} className="h-10 p-1" /></Field>
+                <Field label="Title">
+                  <TextInput
+                    value={l.title}
+                    onChange={(e) => patch(l.slug, { title: e.target.value })}
+                  />
+                </Field>
+                <Field label="Kicker">
+                  <TextInput
+                    value={l.kicker}
+                    onChange={(e) => patch(l.slug, { kicker: e.target.value })}
+                  />
+                </Field>
+                <Field label="Tagline">
+                  <TextInput
+                    value={l.tagline}
+                    onChange={(e) => patch(l.slug, { tagline: e.target.value })}
+                  />
+                </Field>
+                <Field label="Image URL">
+                  <TextInput
+                    value={l.image}
+                    onChange={(e) => patch(l.slug, { image: e.target.value })}
+                  />
+                </Field>
+                <Field label="CTA link">
+                  <TextInput
+                    value={l.ctaHref}
+                    onChange={(e) => patch(l.slug, { ctaHref: e.target.value })}
+                  />
+                </Field>
+                <Field label="CTA label">
+                  <TextInput
+                    value={l.ctaLabel}
+                    onChange={(e) => patch(l.slug, { ctaLabel: e.target.value })}
+                  />
+                </Field>
+                <Field label="Accent">
+                  <TextInput
+                    type="color"
+                    value={l.accent}
+                    onChange={(e) => patch(l.slug, { accent: e.target.value })}
+                    className="h-10 p-1"
+                  />
+                </Field>
+                <Field label="Background">
+                  <TextInput
+                    type="color"
+                    value={l.bg}
+                    onChange={(e) => patch(l.slug, { bg: e.target.value })}
+                    className="h-10 p-1"
+                  />
+                </Field>
               </div>
-              <div className="mt-3"><Field label="Body"><TextArea rows={4} value={l.body} onChange={(e) => patch(l.slug, { body: e.target.value })} /></Field></div>
+              <div className="mt-3">
+                <Field label="Body">
+                  <TextArea
+                    rows={4}
+                    value={l.body}
+                    onChange={(e) => patch(l.slug, { body: e.target.value })}
+                  />
+                </Field>
+              </div>
             </details>
           </Card>
         ))}
         {landings.length === 0 && (
-          <Card><p className="text-sm text-white/50">No custom landing pages yet.</p></Card>
+          <Card>
+            <p className="text-sm text-white/50">No custom landing pages yet.</p>
+          </Card>
         )}
       </div>
     </>
@@ -768,18 +1367,39 @@ function PortfolioPanel() {
   const patch = (p: Partial<typeof bio>) => update({ bio: { ...bio, ...p } });
   return (
     <>
-      <SectionHeader title="Portfolio Bio" subtitle="Personal details shown across the portfolio and contact areas." />
+      <SectionHeader
+        title="Portfolio Bio"
+        subtitle="Personal details shown across the portfolio and contact areas."
+      />
       <Card>
         <div className="grid gap-3 md:grid-cols-2">
-          <Field label="Full name"><TextInput value={bio.name} onChange={(e) => patch({ name: e.target.value })} /></Field>
-          <Field label="Nickname"><TextInput value={bio.nickname} onChange={(e) => patch({ nickname: e.target.value })} /></Field>
-          <Field label="Headline"><TextInput value={bio.headline} onChange={(e) => patch({ headline: e.target.value })} /></Field>
-          <Field label="Location"><TextInput value={bio.location} onChange={(e) => patch({ location: e.target.value })} /></Field>
-          <Field label="Email"><TextInput type="email" value={bio.email} onChange={(e) => patch({ email: e.target.value })} /></Field>
-          <Field label="Phone"><TextInput value={bio.phone} onChange={(e) => patch({ phone: e.target.value })} /></Field>
+          <Field label="Full name">
+            <TextInput value={bio.name} onChange={(e) => patch({ name: e.target.value })} />
+          </Field>
+          <Field label="Nickname">
+            <TextInput value={bio.nickname} onChange={(e) => patch({ nickname: e.target.value })} />
+          </Field>
+          <Field label="Headline">
+            <TextInput value={bio.headline} onChange={(e) => patch({ headline: e.target.value })} />
+          </Field>
+          <Field label="Location">
+            <TextInput value={bio.location} onChange={(e) => patch({ location: e.target.value })} />
+          </Field>
+          <Field label="Email">
+            <TextInput
+              type="email"
+              value={bio.email}
+              onChange={(e) => patch({ email: e.target.value })}
+            />
+          </Field>
+          <Field label="Phone">
+            <TextInput value={bio.phone} onChange={(e) => patch({ phone: e.target.value })} />
+          </Field>
         </div>
         <div className="mt-3">
-          <Field label="Short bio"><TextArea rows={4} value={bio.bio} onChange={(e) => patch({ bio: e.target.value })} /></Field>
+          <Field label="Short bio">
+            <TextArea rows={4} value={bio.bio} onChange={(e) => patch({ bio: e.target.value })} />
+          </Field>
         </div>
         <div className="mt-3 flex items-center gap-2 text-xs text-white/50">
           <Save className="h-3.5 w-3.5" /> Changes save automatically.

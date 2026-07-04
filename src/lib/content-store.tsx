@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { LEGENDS as DEFAULT_LEGENDS, type Legend } from "../data/legends";
 import { PROJECTS as DEFAULT_PROJECTS, type Project } from "../data/projects";
 
@@ -54,16 +62,63 @@ interface Store {
 }
 
 const DEFAULT_TOON: ToonSlide[] = [
-  { id: "t1", src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/1.02464a56.png", bg: "#F4845F", label: "Toon 01" },
-  { id: "t2", src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/2.b977faab.png", bg: "#6BBF7A", label: "Toon 02" },
-  { id: "t3", src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/3.4df853b4.png", bg: "#E882B4", label: "Toon 03" },
-  { id: "t4", src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/4.4457fbce.png", bg: "#6EB5FF", label: "Toon 04" },
+  {
+    id: "t1",
+    src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/1.02464a56.png",
+    bg: "#F4845F",
+    label: "Toon 01",
+  },
+  {
+    id: "t2",
+    src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/2.b977faab.png",
+    bg: "#6BBF7A",
+    label: "Toon 02",
+  },
+  {
+    id: "t3",
+    src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/3.4df853b4.png",
+    bg: "#E882B4",
+    label: "Toon 03",
+  },
+  {
+    id: "t4",
+    src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/4.4457fbce.png",
+    bg: "#6EB5FF",
+    label: "Toon 04",
+  },
 ];
 
 const DEFAULT_PRICING: PricingTier[] = [
-  { id: "starter", name: "Starter Site", price: "$1,200", weeks: "2 weeks", best: false, inc: ["Up to 5 pages", "Responsive design", "Contact form", "Basic SEO", "Deployed live"] },
-  { id: "growth", name: "Growth Site", price: "$3,500", weeks: "4 weeks", best: true, inc: ["Up to 12 pages", "CMS / content model", "Auth + user accounts", "Analytics dashboard", "Custom animations"] },
-  { id: "signature", name: "Signature Build", price: "from $8,000", weeks: "6–10 weeks", best: false, inc: ["Unlimited pages", "AI features", "Payments", "Multi-language", "Investor dashboard"] },
+  {
+    id: "starter",
+    name: "Starter Site",
+    price: "$1,200",
+    weeks: "2 weeks",
+    best: false,
+    inc: ["Up to 5 pages", "Responsive design", "Contact form", "Basic SEO", "Deployed live"],
+  },
+  {
+    id: "growth",
+    name: "Growth Site",
+    price: "$3,500",
+    weeks: "4 weeks",
+    best: true,
+    inc: [
+      "Up to 12 pages",
+      "CMS / content model",
+      "Auth + user accounts",
+      "Analytics dashboard",
+      "Custom animations",
+    ],
+  },
+  {
+    id: "signature",
+    name: "Signature Build",
+    price: "from $8,000",
+    weeks: "6–10 weeks",
+    best: false,
+    inc: ["Unlimited pages", "AI features", "Payments", "Multi-language", "Investor dashboard"],
+  },
 ];
 
 const DEFAULT_BIO: PortfolioBio = {

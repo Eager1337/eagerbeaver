@@ -12,9 +12,16 @@ export const Route = createFileRoute("/explore")({
   head: () => ({
     meta: [
       { title: "Explore — 50 production-grade case studies" },
-      { name: "description", content: "Browse 50 showcase websites across education, medical, government, AI, creator economy, advanced systems and more." },
+      {
+        name: "description",
+        content:
+          "Browse 50 showcase websites across education, medical, government, AI, creator economy, advanced systems and more.",
+      },
       { property: "og:title", content: "Explore 50 Sites — Portfolio OS" },
-      { property: "og:description", content: "Filter, search, and dive into 50 production-grade case studies." },
+      {
+        property: "og:description",
+        content: "Filter, search, and dive into 50 production-grade case studies.",
+      },
     ],
   }),
   component: ExplorePage,
@@ -37,10 +44,12 @@ function ExplorePage() {
       if (active !== "All" && p.category !== active) return false;
       if (q) {
         const s = q.toLowerCase();
-        return p.title.toLowerCase().includes(s) ||
+        return (
+          p.title.toLowerCase().includes(s) ||
           p.tagline.toLowerCase().includes(s) ||
           p.stack.join(" ").toLowerCase().includes(s) ||
-          p.category.toLowerCase().includes(s);
+          p.category.toLowerCase().includes(s)
+        );
       }
       return true;
     });
@@ -60,19 +69,37 @@ function ExplorePage() {
       <div className="absolute inset-0 -z-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.12),transparent_50%)]" />
 
       <header className="relative z-10 mx-auto max-w-7xl px-6 py-10">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white"
+        >
           <ArrowLeft className="h-4 w-4" /> Back to home
         </Link>
         <div className="mt-6 flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">/explore</div>
-            <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-6xl" style={{ fontFamily: "'Kanit', sans-serif" }}>
-              50 production-grade<br /><span className="bg-gradient-to-r from-fuchsia-400 to-sky-400 bg-clip-text text-transparent">case studies</span>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">
+              /explore
+            </div>
+            <h1
+              className="mt-2 text-4xl font-black tracking-tight sm:text-6xl"
+              style={{ fontFamily: "'Kanit', sans-serif" }}
+            >
+              50 production-grade
+              <br />
+              <span className="bg-gradient-to-r from-fuchsia-400 to-sky-400 bg-clip-text text-transparent">
+                case studies
+              </span>
             </h1>
           </div>
           <div className="flex items-center gap-3 text-xs text-white/60">
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5"><GitCompare className="mr-1.5 inline h-3 w-3" />Compare mode</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5"><BookmarkCheck className="mr-1.5 inline h-3 w-3" />{bookmarks.size} saved</span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <GitCompare className="mr-1.5 inline h-3 w-3" />
+              Compare mode
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+              <BookmarkCheck className="mr-1.5 inline h-3 w-3" />
+              {bookmarks.size} saved
+            </span>
           </div>
         </div>
 
@@ -109,17 +136,26 @@ function ExplorePage() {
             <div key={p.slug} className="relative">
               <ProjectCard project={p} onOpen={() => openProject(p)} />
               <button
-                onClick={(e) => { e.stopPropagation(); toggleBookmark(p.slug); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleBookmark(p.slug);
+                }}
                 className="absolute right-3 top-3 z-20 rounded-full bg-black/40 p-2 text-white backdrop-blur hover:bg-black/60"
                 aria-label="Bookmark project"
               >
-                {bookmarks.has(p.slug) ? <BookmarkCheck className="h-4 w-4 text-amber-300" /> : <Bookmark className="h-4 w-4" />}
+                {bookmarks.has(p.slug) ? (
+                  <BookmarkCheck className="h-4 w-4 text-amber-300" />
+                ) : (
+                  <Bookmark className="h-4 w-4" />
+                )}
               </button>
             </div>
           ))}
         </motion.div>
         {filtered.length === 0 && (
-          <div className="py-24 text-center text-white/50">No projects match — try another filter.</div>
+          <div className="py-24 text-center text-white/50">
+            No projects match — try another filter.
+          </div>
         )}
       </main>
 

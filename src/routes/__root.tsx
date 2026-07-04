@@ -92,8 +92,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "EAGER-HUB" },
       { name: "twitter:description", content: "MY PORTFOLIO" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/02c07f08-8caf-4d55-9b9e-6a247d529a58/id-preview-8382bdc8--1de7e9b1-145d-4226-af15-d4f656f5d361.lovable.app-1781745802966.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/02c07f08-8caf-4d55-9b9e-6a247d529a58/id-preview-8382bdc8--1de7e9b1-145d-4226-af15-d4f656f5d361.lovable.app-1781745802966.png" },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/02c07f08-8caf-4d55-9b9e-6a247d529a58/id-preview-8382bdc8--1de7e9b1-145d-4226-af15-d4f656f5d361.lovable.app-1781745802966.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/02c07f08-8caf-4d55-9b9e-6a247d529a58/id-preview-8382bdc8--1de7e9b1-145d-4226-af15-d4f656f5d361.lovable.app-1781745802966.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -135,39 +143,39 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <PortfolioOsSettingsProvider>
-       <ContentStoreProvider>
-       <MotionConfig reducedMotion="user">
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <CommandPalette />
-        <div className="fixed bottom-4 right-4 z-[100] flex gap-2">
-          <Link
-            to="/admin"
-            className="rounded-full bg-white/10 border border-white/20 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:bg-white/20 transition-colors backdrop-blur"
-          >
-            Admin
-          </Link>
-          <Link
-            to="/portfolio-os/suite"
-            className="rounded-full bg-gradient-to-r from-fuchsia-500 to-sky-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
-          >
-            Investor Suite →
-          </Link>
-          <Link
-            to="/legends"
-            className="rounded-full bg-black/80 border border-white/30 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:bg-black backdrop-blur transition-colors"
-          >
-            Legends →
-          </Link>
-          <Link
-            to="/portfolio"
-            className="rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-black shadow-lg hover:bg-white transition-colors backdrop-blur"
-          >
-            About Eager Beaver →
-          </Link>
-        </div>
-       </MotionConfig>
-       </ContentStoreProvider>
+        <ContentStoreProvider>
+          <MotionConfig reducedMotion="user">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <CommandPalette />
+            <div className="fixed bottom-4 right-4 z-[100] flex gap-2">
+              <Link
+                to="/admin"
+                className="rounded-full bg-white/10 border border-white/20 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:bg-white/20 transition-colors backdrop-blur"
+              >
+                Admin
+              </Link>
+              <Link
+                to="/portfolio-os/suite"
+                className="rounded-full bg-gradient-to-r from-fuchsia-500 to-sky-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
+              >
+                Investor Suite →
+              </Link>
+              <Link
+                to="/legends"
+                className="rounded-full bg-black/80 border border-white/30 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:bg-black backdrop-blur transition-colors"
+              >
+                Legends →
+              </Link>
+              <Link
+                to="/portfolio"
+                className="rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-black shadow-lg hover:bg-white transition-colors backdrop-blur"
+              >
+                About Eager Beaver →
+              </Link>
+            </div>
+          </MotionConfig>
+        </ContentStoreProvider>
       </PortfolioOsSettingsProvider>
     </QueryClientProvider>
   );
