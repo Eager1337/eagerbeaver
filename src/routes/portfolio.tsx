@@ -5,6 +5,7 @@ import { downloadCvPdf, downloadRateCardPdf } from "../lib/pdf-exports";
 import portraitRed from "../assets/portrait-red.jpg.asset.json";
 import portraitBlackSit from "../assets/portrait-black-sitting.jpg.asset.json";
 import portraitBlackStand from "../assets/portrait-black-standing.jpg.asset.json";
+import { useContent } from "../lib/content-store";
 
 const PORTRAITS = [portraitRed, portraitBlackStand, portraitBlackSit];
 
@@ -56,6 +57,7 @@ const PROCESS = [
 
 function PortfolioPage() {
   const [pIdx, setPIdx] = useState(0);
+  const { pricing } = useContent();
   const nextP = () => setPIdx((i) => (i + 1) % PORTRAITS.length);
   const prevP = () => setPIdx((i) => (i - 1 + PORTRAITS.length) % PORTRAITS.length);
   const current = PORTRAITS[pIdx];
@@ -346,11 +348,7 @@ function PortfolioPage() {
           <h2 className="mt-3 font-[Anton,sans-serif] uppercase text-4xl sm:text-6xl leading-none">Pricing, upfront.</h2>
           <p className="mt-4 max-w-2xl text-sm text-[#A8A8A8]">Fixed-scope packages. No hourly billing games. Everything includes design, development, deployment on Lovable Cloud and 30-day post-launch support.</p>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {[
-              { name: "Starter Site", price: "$1,200", weeks: "2 weeks", best: false, inc: ["Up to 5 pages", "Responsive design", "Contact form", "Basic SEO", "Deployed live"] },
-              { name: "Growth Site", price: "$3,500", weeks: "4 weeks", best: true, inc: ["Up to 12 pages", "CMS / content model", "Auth + user accounts", "Analytics dashboard", "Custom animations"] },
-              { name: "Signature Build", price: "from $8,000", weeks: "6–10 weeks", best: false, inc: ["Unlimited pages", "AI features", "Payments", "Multi-language", "Investor dashboard"] },
-            ].map((t) => (
+            {pricing.map((t) => (
               <div key={t.name} className={`rounded-2xl border p-6 sm:p-7 ${t.best ? "border-[#E63946] bg-[#1A1410]" : "border-white/10 bg-[#0C0C0C]"}`}>
                 {t.best && <div className="mb-3 inline-block rounded-full bg-[#E63946] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest">Most popular</div>}
                 <h3 className="font-[Anton,sans-serif] uppercase text-2xl">{t.name}</h3>

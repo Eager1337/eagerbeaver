@@ -10,6 +10,7 @@ import onePieceCast from "../assets/one-piece-cast.png.asset.json";
 import saitama from "../assets/saitama.png.asset.json";
 import LithosHero from "../components/LithosHero";
 import { NinjaTortoiseHero } from "../components/portfolio-os/NinjaTortoiseHero";
+import { useContent } from "../lib/content-store";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/")({
 
 /* ------------------- TOONHUB HERO ------------------- */
 
-const IMAGES = [
+const BASE_IMAGES = [
   { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/1.02464a56.png", bg: "#F4845F", label: "Toon 01" },
   { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/2.b977faab.png", bg: "#6BBF7A", label: "Toon 02" },
   { src: "https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/3.4df853b4.png", bg: "#E882B4", label: "Toon 03" },
@@ -29,7 +30,6 @@ const IMAGES = [
   { src: onePieceCast.url, bg: "#0A1A2E", label: "One Piece Crew" },
   { src: saitama.url, bg: "#050505", label: "One Punch" },
 ];
-const N = IMAGES.length;
 
 const GRAIN_SVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/></svg>`;
 const EASE = "cubic-bezier(0.4,0,0.2,1)";
@@ -38,13 +38,18 @@ const ITEM_TRANSITION = `transform 650ms ${EASE}, filter 650ms ${EASE}, opacity 
 function ToonhubHero() {
   const [activeIndex, setActiveIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
-  const current = IMAGES[activeIndex];
+  const { toonSlides } = useContent();
+  // Merge admin-added slides after the built-in ones (admin can also override the first 4 via defaults)
+  const IMAGES = [...BASE_IMAGES, ...toonSlides.filter((s) => !BASE_IMAGES.some((b) => b.src === s.src)).map((s) => ({ src: s.src, bg: s.bg, label: s.label }))];
+  const N = IMAGES.length;
+  const safeIndex = Math.min(activeIndex, N - 1);
+  const current = IMAGES[safeIndex];
 
   const navigate = useCallback(
     (dir: "next" | "prev") => {
       setActiveIndex((prev) => (dir === "next" ? (prev + 1) % N : (prev + N - 1) % N));
     },
-    [],
+    [N],
   );
 
   useEffect(() => {

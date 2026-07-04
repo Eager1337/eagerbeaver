@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CommandPalette } from "../components/portfolio-os/CommandPalette";
 import { PortfolioOsSettingsProvider, bumpSession } from "../lib/portfolio-os-settings";
 import { registerPortfolioOsSw } from "../lib/register-sw";
+import { ContentStoreProvider } from "../lib/content-store";
 
 function NotFoundComponent() {
   return (
@@ -134,11 +135,18 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <PortfolioOsSettingsProvider>
+       <ContentStoreProvider>
        <MotionConfig reducedMotion="user">
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CommandPalette />
         <div className="fixed bottom-4 right-4 z-[100] flex gap-2">
+          <Link
+            to="/admin"
+            className="rounded-full bg-white/10 border border-white/20 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:bg-white/20 transition-colors backdrop-blur"
+          >
+            Admin
+          </Link>
           <Link
             to="/portfolio-os/suite"
             className="rounded-full bg-gradient-to-r from-fuchsia-500 to-sky-500 px-4 py-2 text-xs font-semibold text-white shadow-lg hover:opacity-90 transition-opacity"
@@ -159,6 +167,7 @@ function RootComponent() {
           </Link>
         </div>
        </MotionConfig>
+       </ContentStoreProvider>
       </PortfolioOsSettingsProvider>
     </QueryClientProvider>
   );

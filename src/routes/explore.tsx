@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Search, Bookmark, BookmarkCheck, GitCompare } from "lucide-react";
-import { PROJECTS, CATEGORIES, type Project, type ProjectCategory } from "../data/projects";
+import { CATEGORIES, type Project, type ProjectCategory } from "../data/projects";
+import { useContent } from "../lib/content-store";
 import { ProjectCard } from "../components/portfolio-os/ProjectCard";
 import { ProjectDetailModal } from "../components/portfolio-os/ProjectDetailModal";
 import { trackEvent } from "../lib/portfolio-os-settings";
@@ -24,6 +25,7 @@ function ExplorePage() {
   const [active, setActive] = useState<ProjectCategory | "All">("All");
   const [open, setOpen] = useState<Project | null>(null);
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
+  const { projects: PROJECTS } = useContent();
 
   const openProject = (p: Project) => {
     trackEvent("project", p.slug);
@@ -42,7 +44,7 @@ function ExplorePage() {
       }
       return true;
     });
-  }, [q, active]);
+  }, [q, active, PROJECTS]);
 
   const toggleBookmark = (slug: string) => {
     setBookmarks((prev) => {

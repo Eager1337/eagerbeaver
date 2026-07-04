@@ -1,6 +1,6 @@
-// Portfolio OS offline cache for Explore. Only registered from the app in production.
-const CACHE = "portfolio-os-explore-v1";
-const OFFLINE_URLS = ["/explore"];
+// Portfolio OS offline cache — Explore, Legends, Landing pages, and their media.
+const CACHE = "portfolio-os-cache-v2";
+const OFFLINE_URLS = ["/", "/explore", "/legends", "/portfolio", "/portfolio-os/suite"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -22,9 +22,15 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  const isExplore = url.pathname === "/explore" || url.pathname.startsWith("/explore/");
+  const p = url.pathname;
+  const isCovered =
+    p === "/" ||
+    p.startsWith("/explore") ||
+    p.startsWith("/legends") ||
+    p.startsWith("/landing") ||
+    p.startsWith("/portfolio");
   const isMedia = /\.(png|jpg|jpeg|webp|gif|svg|mp4|woff2?)$/i.test(url.pathname);
-  if (!isExplore && !isMedia) return;
+  if (!isCovered && !isMedia) return;
 
   event.respondWith(
     (async () => {
@@ -36,10 +42,11 @@ self.addEventListener("fetch", (event) => {
       } catch {
         const cached = await caches.match(req);
         if (cached) return cached;
-        if (isExplore) {
-          const fallback = await caches.match("/explore");
-          if (fallback) return fallback;
-        }
+        // navigation fallbacks
+        if (p.startsWith("/explore")) { const f = await caches.match("/explore"); if (f) return f; }
+        if (p.startsWith("/legends")) { const f = await caches.match("/legends"); if (f) return f; }
+        if (p.startsWith("/portfolio")) { const f = await caches.match("/portfolio"); if (f) return f; }
+        if (p === "/") { const f = await caches.match("/"); if (f) return f; }
         return new Response("Offline", { status: 503 });
       }
     })(),

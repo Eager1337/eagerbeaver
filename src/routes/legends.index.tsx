@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { LEGENDS } from "../data/legends";
+import { useContent } from "../lib/content-store";
 
 export const Route = createFileRoute("/legends/")({
   head: () => ({
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/legends/")({
 });
 
 function LegendsIndex() {
+  const { legends: LEGENDS } = useContent();
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="mx-auto max-w-7xl px-6 py-14">
