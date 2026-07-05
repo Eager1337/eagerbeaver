@@ -5,13 +5,15 @@ import { Search, ArrowRight } from "lucide-react";
 import { PROJECTS } from "../../data/projects";
 import { PAGES } from "../../data/pages";
 import { FEATURES } from "../../data/features";
+import { useContent } from "../../lib/content-store";
 
-interface Item { id: string; label: string; kind: "page" | "project" | "feature"; to: string }
+interface Item { id: string; label: string; kind: "page" | "project" | "feature" | "legend" | "landing"; to: string }
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const navigate = useNavigate();
+  const { projects, legends, landings } = useContent();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -30,14 +32,18 @@ export function CommandPalette() {
     };
   }, []);
 
+  const liveProjects = projects.length ? projects : PROJECTS;
   const items: Item[] = useMemo(() => [
     { id: "home", label: "Home", kind: "page", to: "/" },
     { id: "explore", label: "Explore — 50 projects", kind: "page", to: "/explore" },
     { id: "portfolio-os", label: "Portfolio OS — 50 features", kind: "page", to: "/portfolio-os" },
-    ...PROJECTS.map((p) => ({ id: `proj-${p.slug}`, label: `${p.title} · ${p.category}`, kind: "project" as const, to: `/explore/${p.slug}` })),
+    ...liveProjects.map((p) => ({ id: `proj-${p.slug}`, label: `${p.title} · ${p.category}`, kind: "project" as const, to: `/explore/${p.slug}` })),
+    ...liveProjects.map((p) => ({ id: `landing-${p.slug}`, label: `${p.title} landing page`, kind: "landing" as const, to: `/landing/${p.slug}` })),
+    ...legends.map((l) => ({ id: `legend-${l.slug}`, label: `${l.title} · Legend`, kind: "legend" as const, to: `/legends/${l.slug}` })),
+    ...landings.map((l) => ({ id: `custom-${l.slug}`, label: `${l.title} · Custom landing`, kind: "landing" as const, to: `/landing/${l.slug}` })),
     ...PAGES.map((p) => ({ id: `page-${p.slug}`, label: `${p.title} · ${p.group}`, kind: "page" as const, to: `/portfolio-os/${p.slug}` })),
     ...FEATURES.map((f) => ({ id: `feat-${f.id}`, label: `${f.name} · ${f.group}`, kind: "feature" as const, to: `/portfolio-os#feature-${f.id}` })),
-  ], []);
+  ], [landings, legends, liveProjects]);
 
   const filtered = useMemo(() => {
     if (!q) return items.slice(0, 12);
@@ -86,7 +92,7 @@ export function CommandPalette() {
                     className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm hover:bg-white/10"
                   >
                     <span className="flex items-center gap-3">
-                      <span className={`rounded px-1.5 py-0.5 text-[9px] uppercase tracking-widest ${it.kind === "project" ? "bg-violet-500/20 text-violet-200" : it.kind === "page" ? "bg-sky-500/20 text-sky-200" : "bg-amber-500/20 text-amber-200"}`}>
+                      <span className={`rounded px-1.5 py-0.5 text-[9px] uppercase tracking-widest ${it.kind === "project" ? "bg-violet-500/20 text-violet-200" : it.kind === "page" ? "bg-sky-500/20 text-sky-200" : it.kind === "legend" ? "bg-rose-500/20 text-rose-200" : it.kind === "landing" ? "bg-emerald-500/20 text-emerald-200" : "bg-amber-500/20 text-amber-200"}`}>
                         {it.kind}
                       </span>
                       {it.label}

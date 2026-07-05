@@ -132,6 +132,19 @@ const DEFAULT_BIO: PortfolioBio = {
 };
 
 const KEY = "portfolio_content_store_v1";
+const CHANNEL = "portfolio_content_store_channel_v1";
+
+function emitStoreChanged(s: Store) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("portfolio-content-store-updated", { detail: s }));
+  try {
+    const channel = new BroadcastChannel(CHANNEL);
+    channel.postMessage({ type: "updated", store: s });
+    channel.close();
+  } catch {
+    // BroadcastChannel is optional.
+  }
+}
 
 function readStore(): Store {
   const empty: Store = {
@@ -166,6 +179,7 @@ function writeStore(s: Store) {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(s));
+    emitStoreChanged(s);
   } catch {
     // ignore quota
   }
@@ -185,8 +199,23 @@ export function ContentStoreProvider({ children }: { children: ReactNode }) {
     const onStorage = (e: StorageEvent) => {
       if (e.key === KEY) setState(readStore());
     };
+    const onLocalUpdate = () => setState(readStore());
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    window.addEventListener("portfolio-content-store-updated", onLocalUpdate);
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel(CHANNEL);
+      channel.onmessage = (event) => {
+        if (event.data?.type === "updated") setState(readStore());
+      };
+    } catch {
+      channel = null;
+    }
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("portfolio-content-store-updated", onLocalUpdate);
+      channel?.close();
+    };
   }, []);
 
   const update = useCallback((patch: Partial<Store>) => {
@@ -199,7 +228,9 @@ export function ContentStoreProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(() => {
     if (typeof window !== "undefined") window.localStorage.removeItem(KEY);
-    setState(readStore());
+    const next = readStore();
+    setState(next);
+    emitStoreChanged(next);
   }, []);
 
   const value = useMemo<Ctx>(() => ({ ...state, update, reset }), [state, update, reset]);
