@@ -31,22 +31,22 @@ function PortfolioOSIndex() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-14">
+    <div className="mx-auto max-w-7xl overflow-hidden px-5 py-10 pb-28 sm:px-6 sm:py-14">
       <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">/portfolio-os</div>
-      <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-6xl" style={{ fontFamily: "'Kanit', sans-serif" }}>
+      <h1 className="mt-2 max-w-5xl text-4xl font-black leading-[0.98] tracking-tight sm:text-6xl" style={{ fontFamily: "'Kanit', sans-serif" }}>
         The operating system<br />
         <span className="bg-gradient-to-r from-fuchsia-400 to-sky-400 bg-clip-text text-transparent">behind the portfolio</span>
       </h1>
-      <p className="mt-4 max-w-2xl text-white/70">
+      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
         50 investor-grade features and 50 pages, organized like a real OS. Press <kbd className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 text-[10px]">⌘K</kbd> to jump to any one.
       </p>
 
-      <div className="mt-8 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
+      <div className="mt-8 inline-grid w-full grid-cols-2 rounded-full border border-white/10 bg-white/5 p-1 backdrop-blur sm:w-auto">
         {(["features", "pages"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${tab === t ? "bg-white text-black" : "text-white/70 hover:text-white"}`}
+            className={`rounded-full px-4 py-3 text-[11px] font-semibold uppercase tracking-widest transition-colors sm:px-5 sm:py-2 sm:text-xs ${tab === t ? "bg-white text-black" : "text-white/70 hover:text-white"}`}
           >
             {t === "features" ? "50 Features" : "50 Pages"}
           </button>
