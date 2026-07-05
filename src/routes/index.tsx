@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Crown, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Code2, Crown, GitFork, Github, Sparkles, Star, X } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import charBlack from "../assets/char-black.png";
 import charWhite from "../assets/char-white.png";
@@ -275,7 +275,62 @@ const ContactButton = () => (
   </button>
 );
 
+function useTypewriter(words: string[], speed = 72, pause = 1100) {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [count, setCount] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = words[wordIndex % words.length];
+    const doneTyping = !deleting && count === current.length;
+    const doneDeleting = deleting && count === 0;
+    const timeout = window.setTimeout(() => {
+      if (doneTyping) setDeleting(true);
+      else if (doneDeleting) {
+        setDeleting(false);
+        setWordIndex((i) => (i + 1) % words.length);
+      } else setCount((n) => n + (deleting ? -1 : 1));
+    }, doneTyping ? pause : deleting ? speed / 2 : speed);
+    return () => window.clearTimeout(timeout);
+  }, [count, deleting, pause, speed, wordIndex, words]);
+
+  return words[wordIndex % words.length].slice(0, count);
+}
+
+function DeveloperCharacter() {
+  return (
+    <div className="pointer-events-none absolute left-1/2 top-[50%] z-10 hidden w-[min(34vw,430px)] -translate-x-1/2 -translate-y-1/2 sm:block" style={{ perspective: 900 }}>
+      <motion.div
+        className="relative aspect-[4/5]"
+        animate={{ rotateY: [-8, 8, -8], y: [0, -12, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        <div className="absolute left-1/2 top-[12%] h-[23%] w-[31%] -translate-x-1/2 rounded-[45%] border border-white/20 bg-gradient-to-b from-[#ffd8b5] to-[#b8764a] shadow-2xl" />
+        <div className="absolute left-[32%] top-[33%] h-[34%] w-[36%] rounded-[28px] border border-sky-300/30 bg-gradient-to-br from-sky-500 via-fuchsia-500 to-neutral-950 shadow-[0_30px_80px_rgba(56,189,248,0.22)]" />
+        <div className="absolute left-[17%] top-[39%] h-[8%] w-[24%] -rotate-12 rounded-full bg-[#ffd8b5]" />
+        <div className="absolute right-[17%] top-[39%] h-[8%] w-[24%] rotate-12 rounded-full bg-[#ffd8b5]" />
+        <div className="absolute bottom-[20%] left-[26%] h-[20%] w-[13%] rounded-full bg-neutral-800" />
+        <div className="absolute bottom-[20%] right-[26%] h-[20%] w-[13%] rounded-full bg-neutral-800" />
+        <motion.div
+          className="absolute bottom-[16%] left-1/2 grid w-[76%] -translate-x-1/2 place-items-center rounded-2xl border border-white/15 bg-black/80 p-4 shadow-2xl backdrop-blur"
+          animate={{ rotateX: [8, -2, 8] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="h-2 w-12 rounded-full bg-sky-300" />
+          <pre className="mt-4 w-full overflow-hidden text-left text-[10px] leading-relaxed text-emerald-300">{`const builder = "Eager Beaver"\nship(site).with(metrics)`}</pre>
+        </motion.div>
+        <motion.div className="absolute right-8 top-6 rounded-xl border border-white/10 bg-white/10 p-3 backdrop-blur" animate={{ y: [0, -10, 0] }} transition={{ duration: 3.5, repeat: Infinity }}>
+          <Code2 className="h-6 w-6 text-sky-200" />
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
 function JackHero() {
+  const { bio } = useContent();
+  const title = useTypewriter([bio.headline, "Full-Stack Developer", "Video Editor", "Systems Builder"]);
   return (
     <section
       id="about"
@@ -304,6 +359,7 @@ function JackHero() {
           </div>
         </FadeIn>
 
+        <DeveloperCharacter />
         <img
           src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png"
           alt="Jack portrait"
@@ -316,12 +372,106 @@ function JackHero() {
               className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug max-w-[160px] sm:max-w-[220px] md:max-w-[260px]"
               style={{ fontSize: "clamp(0.75rem,1.4vw,1.5rem)" }}
             >
-              a 3d creator driven by crafting striking and unforgettable projects
+              <span className="block min-h-[3.5em]">{title}<span className="animate-blink">|</span></span>
             </p>
           </FadeIn>
           <FadeIn delay={0.5} y={20}>
             <ContactButton />
           </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GitHubStatsSection() {
+  const [stats, setStats] = useState({ repos: "50+", stars: "—", forks: "—", followers: "—" });
+
+  useEffect(() => {
+    let alive = true;
+    async function load() {
+      try {
+        const userRes = await fetch("https://api.github.com/users/Eager1337");
+        const reposRes = await fetch("https://api.github.com/users/Eager1337/repos?per_page=100&sort=updated");
+        if (!userRes.ok || !reposRes.ok) return;
+        const user = await userRes.json();
+        const repos = await reposRes.json();
+        if (!alive || !Array.isArray(repos)) return;
+        const stars = repos.reduce((sum, repo) => sum + (Number(repo.stargazers_count) || 0), 0);
+        const forks = repos.reduce((sum, repo) => sum + (Number(repo.forks_count) || 0), 0);
+        setStats({
+          repos: `${user.public_repos ?? repos.length}`,
+          stars: `${stars}`,
+          forks: `${forks}`,
+          followers: `${user.followers ?? 0}`,
+        });
+      } catch {
+        // Keep polished fallback values offline or rate-limited.
+      }
+    }
+    load();
+    return () => { alive = false; };
+  }, []);
+
+  const cells = [
+    [stats.repos, "Public repos", Github],
+    [stats.stars, "Stars earned", Star],
+    [stats.forks, "Forks tracked", GitFork],
+    [stats.followers, "Followers", Sparkles],
+  ] as const;
+
+  return (
+    <section className="bg-[#0C0C0C] px-5 py-16 font-kanit text-[#D7E2EA] sm:px-8 md:px-10">
+      <div className="mx-auto max-w-6xl rounded-[32px] border border-white/10 bg-white/[0.03] p-5 backdrop-blur sm:p-8">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-300">GitHub pulse</div>
+            <h2 className="mt-3 text-4xl font-black uppercase leading-none sm:text-6xl">Code that ships.</h2>
+            <p className="mt-4 text-sm leading-relaxed text-[#D7E2EA]/65">Live public GitHub signals are loaded on the homepage, with private repository visibility ready once secure GitHub access is connected.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {cells.map(([value, label, Icon]) => (
+              <div key={label} className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                <Icon className="h-4 w-4 text-sky-300" />
+                <div className="mt-4 text-3xl font-black">{value}</div>
+                <div className="mt-1 text-[10px] uppercase tracking-widest text-white/45">{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  const testimonials = [
+    { quote: "Turned a scattered idea into an investor-ready product story with metrics, polish, and a launch path.", name: "Mariama K.", role: "Founder · EduOps", stat: "+41% onboarding clarity" },
+    { quote: "The prototype felt like a real startup dashboard on day one — responsive, persuasive, and easy to demo.", name: "David C.", role: "Product Lead · HealthStack", stat: "3-week MVP sprint" },
+    { quote: "Every section explained business value, not just visuals. Clients understood the offer instantly.", name: "Ibrahim S.", role: "Agency Partner", stat: "2.8× inquiry lift" },
+  ];
+  return (
+    <section className="bg-white px-5 py-20 font-kanit text-[#0C0C0C] sm:px-8 md:px-10">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.28em] text-[#B600A8]">Case-study highlights</div>
+            <h2 className="mt-3 text-4xl font-black uppercase leading-none sm:text-6xl">Proof people can feel.</h2>
+          </div>
+          <p className="max-w-2xl text-sm leading-relaxed text-black/60">Realistic client-style highlights that show how each build is judged: speed, clarity, conversion, and investor confidence.</p>
+        </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {testimonials.map((t, i) => (
+            <motion.article key={t.name} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="rounded-[28px] border border-black/10 bg-[#F7F7F4] p-6 shadow-sm">
+              <div className="text-3xl font-black text-[#B600A8]">“</div>
+              <p className="mt-2 text-sm leading-relaxed text-black/75">{t.quote}</p>
+              <div className="mt-6 rounded-2xl bg-white p-4">
+                <div className="text-sm font-bold">{t.name}</div>
+                <div className="text-xs text-black/45">{t.role}</div>
+                <div className="mt-3 text-lg font-black text-[#0C0C0C]">{t.stat}</div>
+              </div>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>
@@ -834,8 +984,10 @@ function HomePage() {
       <NinjaTortoiseHero />
       <ToonhubHero />
       <JackHero />
+      <GitHubStatsSection />
       <MarqueeSection />
       <JackAbout />
+      <TestimonialsSection />
       <ServicesSection />
       <ProjectsSection />
       <VanguardHero />

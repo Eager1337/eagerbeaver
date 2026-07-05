@@ -1,24 +1,15 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { getLegend, LEGENDS, type Legend } from "../data/legends";
+import { LEGENDS, type Legend } from "../data/legends";
+import { useContent } from "../lib/content-store";
 
 export const Route = createFileRoute("/legends/$slug")({
-  loader: ({ params }) => {
-    const legend = getLegend(params.slug);
-    if (!legend) throw notFound();
-    return { legend };
-  },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.legend.title} — Legends · Eager Beaver` },
-          { name: "description", content: loaderData.legend.tagline },
-          { property: "og:title", content: `${loaderData.legend.title} — Legends` },
-          { property: "og:description", content: loaderData.legend.tagline },
-          { property: "og:image", content: loaderData.legend.image },
-        ]
-      : [],
+  head: () => ({
+    meta: [
+      { title: "Legend — Eager Beaver" },
+      { name: "description", content: "Cinematic looping legend landing page." },
+    ],
   }),
   notFoundComponent: () => (
     <div className="flex min-h-screen items-center justify-center bg-black text-white">
@@ -32,8 +23,20 @@ export const Route = createFileRoute("/legends/$slug")({
 });
 
 function LegendPage() {
-  const { legend } = Route.useLoaderData() as { legend: Legend };
-  const others = LEGENDS.filter((l) => l.slug !== legend.slug).slice(0, 4);
+  const { slug } = Route.useParams();
+  const { legends } = useContent();
+  const legend = legends.find((l) => l.slug === slug) ?? LEGENDS.find((l) => l.slug === slug);
+  if (!legend) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-white">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Legend not found</h1>
+          <Link to="/legends" className="mt-4 inline-block rounded-full bg-white px-4 py-2 text-sm text-black">Back to Legends</Link>
+        </div>
+      </div>
+    );
+  }
+  const others = legends.filter((l) => l.slug !== legend.slug).slice(0, 4);
   return (
     <div className="min-h-screen text-white" style={{ background: legend.bg }}>
       <div className="mx-auto max-w-7xl px-6 pt-8">

@@ -1,25 +1,17 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { getProject, PROJECTS, type Project } from "../data/projects";
+import { PROJECTS, type Project } from "../data/projects";
 import { useEffect, useState } from "react";
 import { ProjectDetailModal } from "../components/portfolio-os/ProjectDetailModal";
 import { trackEvent } from "../lib/portfolio-os-settings";
+import { useContent } from "../lib/content-store";
 
 export const Route = createFileRoute("/explore/$slug")({
-  loader: ({ params }) => {
-    const project = getProject(params.slug);
-    if (!project) throw notFound();
-    return { project };
-  },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.project.title} — ${loaderData.project.category} · Portfolio OS` },
-          { name: "description", content: loaderData.project.tagline },
-          { property: "og:title", content: `${loaderData.project.title} — Case Study` },
-          { property: "og:description", content: loaderData.project.tagline },
-        ]
-      : [],
+  head: () => ({
+    meta: [
+      { title: "Explore case study — Eager Beaver" },
+      { name: "description", content: "Premium project case study with metrics, problem, solution, stack, and conversion CTA." },
+    ],
   }),
   notFoundComponent: () => (
     <div className="flex min-h-screen items-center justify-center bg-black text-white">
@@ -41,11 +33,28 @@ export const Route = createFileRoute("/explore/$slug")({
 });
 
 function ProjectPage() {
-  const { project } = Route.useLoaderData() as { project: Project };
+  const { slug } = Route.useParams();
+  const { projects } = useContent();
+  const project = projects.find((p) => p.slug === slug) ?? PROJECTS.find((p) => p.slug === slug);
   const [open, setOpen] = useState(true);
-  useEffect(() => { trackEvent("project", project.slug); }, [project.slug]);
+  useEffect(() => {
+    if (project) trackEvent("project", project.slug);
+  }, [project]);
+  if (!project) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black px-6 text-center text-white">
+        <div>
+          <div className="text-sm uppercase tracking-widest text-white/60">404</div>
+          <h1 className="mt-2 text-2xl font-bold">Project not found</h1>
+          <Link to="/explore" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black">
+            <ArrowLeft className="h-4 w-4" /> Back to Explore
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-  const related = PROJECTS.filter((p) => p.category === project.category && p.slug !== project.slug).slice(0, 4);
+  const related = projects.filter((p) => p.category === project.category && p.slug !== project.slug).slice(0, 4);
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
@@ -67,6 +76,13 @@ function ProjectPage() {
             >
               Open case study <ArrowUpRight className="h-4 w-4" />
             </button>
+            <Link
+              to="/landing/$slug"
+              params={{ slug: project.slug }}
+              className="ml-3 mt-8 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              Premium landing <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </div>

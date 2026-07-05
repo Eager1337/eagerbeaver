@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import JSZip from "jszip";
 import {
   LayoutDashboard,
   Image as ImageIcon,
@@ -950,6 +951,31 @@ function ExplorePanel() {
     setOpenSlug(slug);
   };
   const remove = (slug: string) => update({ projects: projects.filter((p) => p.slug !== slug) });
+  const importZip = async (file: File) => {
+    try {
+      const zip = await JSZip.loadAsync(file);
+      const html = Object.keys(zip.files).find((name) => /(^|\/)index\.html$/i.test(name)) ?? Object.keys(zip.files).find((name) => /\.html$/i.test(name));
+      const slug = file.name.replace(/\.zip$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `upload-${Date.now()}`;
+      const np: Project = {
+        slug,
+        title: file.name.replace(/\.zip$/i, "").replace(/[-_]+/g, " ").replace(/\b\w/g, (m) => m.toUpperCase()),
+        category: "Business" as ProjectCategory,
+        tagline: html ? "Uploaded website archive ready for a premium case-study page." : "Uploaded project archive added to Explore.",
+        preview: "linear-gradient(135deg,#111827,#38bdf8)",
+        accent: "#38bdf8",
+        problem: "This project was uploaded from a website ZIP and can now be shaped into a full portfolio case study from the admin dashboard.",
+        solution: "The portfolio instantly creates an Explore item and landing page entry point so visitors can discover, search, and open the project.",
+        stack: ["Uploaded ZIP", "Website", "Portfolio"],
+        features: ["Archive imported", "Landing page generated", "Searchable case study"],
+        metrics: [{ label: "Files", value: String(Object.keys(zip.files).length) }],
+        demo: "",
+      };
+      update({ projects: [np, ...projects.filter((p) => p.slug !== slug)] });
+      setOpenSlug(slug);
+    } catch {
+      alert("Could not read that ZIP file.");
+    }
+  };
 
   return (
     <>
@@ -957,9 +983,15 @@ function ExplorePanel() {
         title="Explore Projects"
         subtitle={`${projects.length} projects powering the /explore grid.`}
         action={
-          <PrimaryBtn onClick={add}>
-            <Plus className="h-3.5 w-3.5" /> New project
-          </PrimaryBtn>
+          <div className="flex flex-wrap gap-2">
+            <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs hover:bg-white/10">
+              <Upload className="h-3.5 w-3.5" /> Upload ZIP
+              <input type="file" accept=".zip,application/zip" className="hidden" onChange={(e) => e.target.files?.[0] && importZip(e.target.files[0])} />
+            </label>
+            <PrimaryBtn onClick={add}>
+              <Plus className="h-3.5 w-3.5" /> New project
+            </PrimaryBtn>
+          </div>
         }
       />
       <Card className="mb-4">
