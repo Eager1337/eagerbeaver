@@ -220,3 +220,21 @@ html[data-os-motion="reduced"] *, html[data-os-motion="reduced"] *::before, html
   scroll-behavior: auto !important;
 }
 html[data-os-font="dyslexic"] body { font-family: "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif !important; letter-spacing: 0.02em; }
+
+html[data-theme-mode="light"] body {
+  background: #f7f7f2;
+}
+
+html[data-theme-mode="light"] main,
+html[data-theme-mode="light"] .min-h-screen.bg-neutral-950,
+html[data-theme-mode="light"] .bg-\[\#0C0C0C\] {
+  filter: invert(0.94) hue-rotate(180deg);
+}
+
+html[data-theme-mode="light"] img,
+html[data-theme-mode="light"] video,
+html[data-theme-mode="light"] canvas,
+html[data-theme-mode="light"] svg,
+html[data-theme-mode="light"] [style*="background-image"] {
+  filter: invert(1) hue-rotate(180deg);
+}

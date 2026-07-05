@@ -51,7 +51,7 @@ export function GlobalSiteTools() {
   const go = (to: string) => {
     setSearchOpen(false);
     setQuery("");
-    navigate({ to });
+    navigate({ to: to as never });
   };
 
   return (

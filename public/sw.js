@@ -1,6 +1,6 @@
 // Portfolio OS offline cache — Explore, Legends, Landing pages, and their media.
-const CACHE = "portfolio-os-cache-v2";
-const OFFLINE_URLS = ["/", "/explore", "/legends", "/portfolio", "/portfolio-os/suite"];
+const CACHE = "portfolio-os-cache-v3";
+const OFFLINE_URLS = ["/", "/explore", "/legends", "/landing/portfolio-os", "/portfolio", "/portfolio-os", "/portfolio-os/suite"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -45,6 +45,7 @@ self.addEventListener("fetch", (event) => {
         // navigation fallbacks
         if (p.startsWith("/explore")) { const f = await caches.match("/explore"); if (f) return f; }
         if (p.startsWith("/legends")) { const f = await caches.match("/legends"); if (f) return f; }
+        if (p.startsWith("/landing")) { const f = await caches.match(req) || await caches.match("/"); if (f) return f; }
         if (p.startsWith("/portfolio")) { const f = await caches.match("/portfolio"); if (f) return f; }
         if (p === "/") { const f = await caches.match("/"); if (f) return f; }
         return new Response("Offline", { status: 503 });
