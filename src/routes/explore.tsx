@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Search, Bookmark, BookmarkCheck, GitCompare } from "lucide-react";
+import { ArrowLeft, Search, Bookmark, BookmarkCheck, GitCompare, ArrowUpRight } from "lucide-react";
 import { CATEGORIES, type Project, type ProjectCategory } from "../data/projects";
 import { useContent } from "../lib/content-store";
 import { ProjectCard } from "../components/portfolio-os/ProjectCard";
@@ -135,6 +135,14 @@ function ExplorePage() {
           {filtered.map((p) => (
             <div key={p.slug} className="relative">
               <ProjectCard project={p} onOpen={() => openProject(p)} />
+              <Link
+                to="/landing/$slug"
+                params={{ slug: p.slug }}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/45 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur hover:bg-black/70"
+              >
+                Landing <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
