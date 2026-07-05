@@ -37,6 +37,9 @@ function ProjectPage() {
   const { projects } = useContent();
   const project = projects.find((p) => p.slug === slug) ?? PROJECTS.find((p) => p.slug === slug);
   const [open, setOpen] = useState(true);
+  useEffect(() => {
+    if (project) trackEvent("project", project.slug);
+  }, [project]);
   if (!project) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-black px-6 text-center text-white">
@@ -50,7 +53,6 @@ function ProjectPage() {
       </div>
     );
   }
-  useEffect(() => { trackEvent("project", project.slug); }, [project.slug]);
 
   const related = projects.filter((p) => p.category === project.category && p.slug !== project.slug).slice(0, 4);
 
