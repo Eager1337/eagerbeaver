@@ -103,7 +103,7 @@ export function NinjaTortoiseHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6 }}
-          className="relative sm:absolute sm:bottom-10 sm:left-0 sm:right-0 mx-auto mt-10 sm:mt-0 grid w-full max-w-5xl grid-cols-2 gap-2.5 sm:gap-3 px-0 sm:px-6 sm:grid-cols-4"
+          className="relative mx-auto mt-10 grid w-full max-w-5xl grid-cols-2 gap-2.5 sm:gap-3 px-0 sm:px-6 sm:grid-cols-4"
         >
           {[
             ["50", "Case studies"],
