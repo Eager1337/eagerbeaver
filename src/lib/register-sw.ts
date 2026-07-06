@@ -22,5 +22,29 @@ export function registerPortfolioOsSw() {
     });
     return;
   }
-  navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+  navigator.serviceWorker
+    .register("/sw.js")
+    .then((reg) => {
+      // Force an immediate update check so returning visitors pick up the
+      // latest Portfolio OS build without a hard refresh.
+      reg.update().catch(() => undefined);
+      if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      reg.addEventListener("updatefound", () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", () => {
+          if (nw.state === "installed" && navigator.serviceWorker.controller) {
+            nw.postMessage({ type: "SKIP_WAITING" });
+          }
+        });
+      });
+    })
+    .catch(() => undefined);
+
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloaded) return;
+    reloaded = true;
+    window.location.reload();
+  });
 }
