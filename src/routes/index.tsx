@@ -11,6 +11,7 @@ import saitama from "../assets/saitama.png.asset.json";
 import LithosHero from "../components/LithosHero";
 import { NinjaTortoiseHero } from "../components/portfolio-os/NinjaTortoiseHero";
 import { useContent } from "../lib/content-store";
+import { DiagnosticsPanel } from "../components/DiagnosticsPanel";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -339,11 +340,16 @@ function JackHero() {
     >
       <FadeIn delay={0} y={-20}>
         <nav className="flex justify-between items-center px-6 md:px-10 pt-6 md:pt-8 text-[#D7E2EA] font-medium uppercase tracking-wider text-sm md:text-lg lg:text-[1.4rem]">
-          {["About", "Price", "Projects", "Contact"].map((l) => (
-            <a key={l} href="#" className="hover:opacity-70 transition-opacity duration-200">
-              {l}
-            </a>
-          ))}
+          <a href="#about" className="hover:opacity-70 transition-opacity duration-200">About</a>
+          <a href="#" className="hover:opacity-70 transition-opacity duration-200">Price</a>
+          <a href="#" className="hover:opacity-70 transition-opacity duration-200">Projects</a>
+          <Link
+            to="/portfolio-os"
+            className="inline-flex items-center gap-2 rounded-full border border-fuchsia-400/60 bg-gradient-to-r from-fuchsia-500/20 to-sky-500/20 px-4 py-1.5 text-xs sm:text-sm hover:from-fuchsia-500/40 hover:to-sky-500/40 transition-all"
+          >
+            <Sparkles className="h-3.5 w-3.5" /> Portfolio OS
+          </Link>
+          <a href="#" className="hover:opacity-70 transition-opacity duration-200">Contact</a>
         </nav>
       </FadeIn>
 
@@ -992,6 +998,7 @@ function HomePage() {
       <ProjectsSection />
       <VanguardHero />
       <LithosHero />
+      <DiagnosticsPanel />
     </main>
   );
 }
