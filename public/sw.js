@@ -1,5 +1,5 @@
 // Portfolio OS offline cache — Explore, Legends, Landing pages, and their media.
-const CACHE = "portfolio-os-cache-v4";
+const CACHE = "portfolio-os-cache-v5";
 const OFFLINE_URLS = ["/", "/explore", "/legends", "/landing/portfolio-os", "/portfolio", "/portfolio-os", "/portfolio-os/suite"];
 
 self.addEventListener("install", (event) => {
